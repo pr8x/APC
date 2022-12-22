@@ -1,0 +1,24 @@
+#include <memory>
+#include <FS.h>
+
+namespace apc {
+
+class usb_drive {
+ public:
+  usb_drive();
+  ~usb_drive();
+
+  const uint8_t* product_name();
+
+  bool is_connected();
+
+  File openPath(const char* path);
+
+  void update();
+
+ private:
+  struct impl;
+  std::unique_ptr<impl> _impl;
+};
+
+}  // namespace apc
