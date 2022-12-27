@@ -1,7 +1,10 @@
 #include <application.h>
+#include <memory>
 
-apc::application app;
+std::unique_ptr<apc::application> app;
 
-void setup() {}
+void setup() {
+    app = std::make_unique<apc::application>();
+}
 
-void loop() { app.update(); }
+void loop() { app->update(); }

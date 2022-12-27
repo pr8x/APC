@@ -6,9 +6,9 @@ namespace apc {
 namespace ui {
 namespace screens {
 
-class browse_screen : public screen {
+class splash_screen : public screen {
  public:
-  browse_screen() : screen(ui_BrowseScreen) {}
+  splash_screen() : screen(ui_SplashScreen) {}
 };
 
 }  // namespace screens

@@ -1,15 +1,15 @@
 #include <Adafruit_GFX.h>        // Core graphics library
-#include <FS.h>
 #include <Adafruit_LvGL_Glue.h>  // Glue library header INCLUDE THIS FIRST!
 #include <Adafruit_ST7735.h>     // Hardware-specific library
+#include <FS.h>
 #include <SPI.h>
 #include <lvgl.h>
 #include <ui/display_driver.h>
+#include <ui/export/ui.h>
 
 struct apc::ui::display_driver::impl {
   impl(const display_config& config)
       : tft(config.cs, config.dc, config.mosi, config.sclk, config.rst) {
-
     Serial.println("Initializing graphics driver...");
 
     tft.initR(INITR_GREENTAB);
@@ -21,21 +21,15 @@ struct apc::ui::display_driver::impl {
     LvGLStatus status = glue.begin(&tft, (TouchScreen*)nullptr);
 
     if (status != LVGL_OK) {
-      Serial.printf("LVGL Glue error %d\r\n", (int)status);
+      Serial.printf("LVGL Glue error: %d\r\n", (int)status);
     }
 
-    lvgl_setup();
+    Serial.println("Bootstrapping UI screens...");
+    ui_init();
   }
 
   Adafruit_ST7735 tft;
   Adafruit_LvGL_Glue glue;
-
-  void lvgl_setup(void) {
-    // Create simple label centered on screen
-    lv_obj_t* label = lv_label_create(lv_scr_act());
-    lv_label_set_text(label, "Hello Arduino BASTARDO!");
-    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
-  }
 };
 
 apc::ui::display_driver::display_driver(const display_config& config) {
@@ -48,3 +42,8 @@ void apc::ui::display_driver::update() {
   lv_task_handler();
   delay(5);
 }
+
+void apc::ui::display_driver::set_screen(const screen* screen) {
+    lv_disp_load_scr(screen->get_object());
+}
+

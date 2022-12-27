@@ -2,13 +2,22 @@
 #include <usb_drive.h>
 
 struct apc::usb_drive::impl {
-  impl() : hub1(usbhost), drive(usbhost), partition(usbhost) {
+  impl()
+      : hub1(usbhost),
+        hub2(usbhost),
+        hub3(usbhost),
+        hub4(usbhost),
+        drive(usbhost),
+        partition(usbhost) {
     Serial.println("Initializing usb host...");
     usbhost.begin();
   }
 
   USBHost usbhost;
   USBHub hub1;
+  USBHub hub2;
+  USBHub hub3;
+  USBHub hub4;
   USBDrive drive;
   USBFilesystem partition;
   bool driveConnected = false;
@@ -35,8 +44,7 @@ void apc::usb_drive::update() {
 
   if (!_impl->driveConnected && isDriveAvailable) {
     _impl->driveConnected = true;
-    Serial.printf("Device connected: %16.16s\n",
-                  _impl->drive.msDriveInfo.inquiry.ProductID);
+    Serial.printf("Device connected: %16.16s\n", product_name());
   } else if (_impl->driveConnected && !isDriveAvailable) {
     _impl->driveConnected = false;
     Serial.println("Device disconnected");

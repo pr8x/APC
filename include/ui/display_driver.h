@@ -1,5 +1,6 @@
-
+#pragma once
 #include <memory>
+#include <ui/screen.h>
 
 namespace apc {
 namespace ui {
@@ -16,6 +17,8 @@ class display_driver {
  public:
   display_driver(const display_config& config);
   ~display_driver();
+
+  void set_screen(const screen* screen);
 
   void update();
 
