@@ -41,18 +41,9 @@ apc::application::application()
   _display.set_screen(&_splashScreen);
   delay(2000);
   _display.set_screen(&_browseScreen);
-
-  pinMode(19, INPUT);
 }
 
 void apc::application::update() {
-  //Serial.printf("MASTER VOLUME: %f\n", _controls.master_volume_pot.read());
-  // Serial.printf("BROWSE KNOB: (Button: %d - Delta: %d)\n",
-  //               _controls.browse_knob.button(), _controls.browse_knob.delta());
-
-  Serial.println(digitalRead(19));
-  delay(300);
-
   _usb.update();
   _display.update();
 }
