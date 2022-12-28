@@ -37,9 +37,9 @@ apc::application::application()
 
         return true;
       }()),
-      _display(DefaultDisplayConfig) {
-  _display.set_screen(&_splashScreen);
-  delay(2000);
+      _display(DefaultDisplayConfig),
+      _browseScreen(&_controls, &_usb) {
+
   _display.set_screen(&_browseScreen);
 }
 

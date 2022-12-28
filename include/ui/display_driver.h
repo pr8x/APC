@@ -18,7 +18,9 @@ class display_driver {
   display_driver(const display_config& config);
   ~display_driver();
 
-  void set_screen(const screen* screen);
+  screen* active_screen();
+
+  void set_screen(screen* screen);
 
   void update();
 

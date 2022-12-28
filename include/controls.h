@@ -1,3 +1,4 @@
+#pragma once
 #include <CD74HC4067.h>
 #include <stdint.h>
 

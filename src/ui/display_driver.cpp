@@ -30,6 +30,7 @@ struct apc::ui::display_driver::impl {
 
   Adafruit_ST7735 tft;
   Adafruit_LvGL_Glue glue;
+  screen* activeScreen;
 };
 
 apc::ui::display_driver::display_driver(const display_config& config) {
@@ -39,11 +40,19 @@ apc::ui::display_driver::display_driver(const display_config& config) {
 apc::ui::display_driver::~display_driver() = default;
 
 void apc::ui::display_driver::update() {
+  if (_impl->activeScreen != nullptr) {
+    _impl->activeScreen->update();
+  }
+
   lv_task_handler();
   delay(5);
 }
 
-void apc::ui::display_driver::set_screen(const screen* screen) {
-    lv_disp_load_scr(screen->get_object());
+apc::ui::screen* apc::ui::display_driver::active_screen() {
+  return _impl->activeScreen;
 }
 
+void apc::ui::display_driver::set_screen(screen* screen) {
+  lv_disp_load_scr(screen->get_object());
+  _impl->activeScreen = screen;
+}

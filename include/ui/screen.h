@@ -10,6 +10,8 @@ class screen {
 
   lv_obj_t* get_object() const { return _object; }
 
+  virtual void update() {}
+
  private:
   lv_obj_t* _object;
 };

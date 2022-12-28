@@ -46,13 +46,12 @@ void ui_BrowseScreen_screen_init(void)
     ui_BrowseScreen = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_BrowseScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
-    ui_FilesPanel = lv_obj_create(ui_BrowseScreen);
+    ui_FilesPanel = lv_list_create(ui_BrowseScreen);
     lv_obj_set_width(ui_FilesPanel, 148);
     lv_obj_set_height(ui_FilesPanel, 94);
     lv_obj_set_x(ui_FilesPanel, 0);
     lv_obj_set_y(ui_FilesPanel, 10);
     lv_obj_set_align(ui_FilesPanel, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_FilesPanel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_FilesPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui_FilesPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
