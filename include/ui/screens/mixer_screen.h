@@ -6,11 +6,11 @@ namespace apc {
 namespace ui {
 namespace screens {
 
-class splash_screen : public screen {
+class mixer_screen : public screen {
  public:
-  splash_screen() : screen(ui_SplashScreen) {}
+  mixer_screen() : screen(ui_MixerScreen) {}
 
-  const char* name() override { return "splash screen"; }
+  const char* name() override { return "mixer screen"; }
 };
 
 }  // namespace screens

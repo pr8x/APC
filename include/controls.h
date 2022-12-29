@@ -32,10 +32,36 @@ struct control_pin {
   CD74HC4067* _mux;
 };
 
+class button {
+ public:
+  button(control_pin pin) : _pin(pin) {}
+
+  bool is_up() { return check(false); }
+  bool is_down() { return check(true); }
+
+ private:
+  bool check(bool downOrUp) {
+    bool isPressed = _pin.readDigital() == LOW;
+
+    if (isPressed && !_pressed) {
+      _pressed = true;
+      return downOrUp;
+    } else if (!isPressed && _pressed) {
+      _pressed = false;
+      return !downOrUp;
+    }
+
+    return false;
+  }
+
+  bool _pressed;
+  control_pin _pin;
+};
+
 class rotary_switch {
  public:
   rotary_switch(control_pin s1, control_pin s2, control_pin key)
-      : _s1(s1), _s2(s2), _key(key) {
+      : button(key), _s1(s1), _s2(s2) {
     _state = _s1.readDigital();
   }
 
@@ -53,16 +79,15 @@ class rotary_switch {
 
     _state = currentState;
 
-    //delay(1);
+    // delay(1);
     return dir;
   }
 
-  bool button() { return _key.readDigital() == LOW; }
+  button button;
 
  private:
   control_pin _s1;
   control_pin _s2;
-  control_pin _key;
   int _state;
 };
 
@@ -70,7 +95,7 @@ class potentiometer {
  public:
   potentiometer(control_pin pin) : _pin(pin) {}
 
-  float read() { return _pin.readAnalog() / 1024.0f; }
+  float value() { return _pin.readAnalog() / 1024.0f; }
 
  private:
   control_pin _pin;

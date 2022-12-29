@@ -5,6 +5,7 @@
 #include <usb_drive.h>
 #include <util.h>
 
+#include <functional>
 #include <vector>
 
 namespace apc {
@@ -25,12 +26,19 @@ class browse_screen : public screen {
                           lv_palette_main(LV_PALETTE_RED));
   }
 
+  const char* name() override { return "browse screen"; }
+
+  void set_browse_callback(std::function<void(const char*)> callback) {
+    _browseCallback = callback;
+  }
+
   void update() override {
     auto bkd = _controls->browse_knob.delta();
 
     if (bkd != 0) {
       if (_selectedFileIndex != -1) {
-        auto oldItem = lv_obj_get_child(ui_FilesPanel, _selectedFileIndex);
+        auto oldItem =
+            lv_obj_get_child(ui_BrowseScreen_FilesPanel, _selectedFileIndex);
 
         lv_obj_remove_style(oldItem, &_lbItemStyleSelected, 0);
       }
@@ -40,15 +48,21 @@ class browse_screen : public screen {
 
       Serial.printf("Selected file index: %d\n", _selectedFileIndex);
 
-      auto currentItem = lv_obj_get_child(ui_FilesPanel, _selectedFileIndex);
+      auto currentItem =
+          lv_obj_get_child(ui_BrowseScreen_FilesPanel, _selectedFileIndex);
 
       lv_obj_add_style(currentItem, &_lbItemStyleSelected, 0);
     }
 
-    if (_controls->browse_knob.button()) {
-       Serial.printf("Loading file %s\n", _files[_selectedFileIndex]);
-    }
+    if (_controls->browse_knob.button.is_down()) {
+      auto selectedFile = _files[_selectedFileIndex];
 
+      if (_browseCallback != nullptr) {
+        _browseCallback(selectedFile);
+      }
+
+      close();
+    }
   }
 
   void load_files() {
@@ -59,7 +73,7 @@ class browse_screen : public screen {
     _files.push_back("Pina Tesla - Solid State");
 
     for (auto file : _files) {
-      lv_list_add_text(ui_FilesPanel, file);
+      lv_list_add_text(ui_BrowseScreen_FilesPanel, file);
     }
   }
 
@@ -71,6 +85,8 @@ class browse_screen : public screen {
 
   controls* _controls;
   usb_drive* _usbDrive;
+
+  std::function<void(const char*)> _browseCallback;
 };
 
 }  // namespace screens

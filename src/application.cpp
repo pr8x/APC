@@ -38,12 +38,24 @@ apc::application::application()
         return true;
       }()),
       _display(DefaultDisplayConfig),
+      // _deckA(&_audioGraph.Deck_A),
+      // _deckB(&_audioGraph.Deck_B),
       _browseScreen(&_controls, &_usb) {
-
-  _display.set_screen(&_browseScreen);
+  _browseScreen.set_browse_callback(
+      [this](const char* f) { on_browse_selection(f); });
+  _display.push_screen(&_mixerScreen);
 }
 
 void apc::application::update() {
+  if (_display.active_screen() != &_browseScreen &&
+      _controls.browse_knob.delta() != 0) {
+    _display.push_screen(&_browseScreen);
+  }
+
   _usb.update();
   _display.update();
+}
+
+void apc::application::on_browse_selection(const char* file) {
+  Serial.printf("on_browse_selection: %s\n", file);
 }

@@ -1,0 +1,16 @@
+{
+  "codename": "Inter11",
+  "ttf_path": "\\assets\\Inter-Regular.ttf",
+  "bin_path": "\\assets\\ui_font_Inter11.bin",
+  "c_path": "\\assets\\ui_font_Inter11.c",
+  "cfg_path": "\\assets\\ui_font_Inter11.fcfg",
+  "size": 11,
+  "bpp": 2,
+  "letters": 3,
+  "ranges": [
+    "0x20-0x7f"
+  ],
+  "symbols": "äüöß",
+  "customparams": "--no-compress --no-prefilter",
+  "uploaded": false
+}

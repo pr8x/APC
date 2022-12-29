@@ -1,0 +1,40 @@
+#include <Audio.h>
+#include <Wire.h>
+#include <SPI.h>
+#include <SD.h>
+#include <SerialFlash.h>
+
+// GUItool: begin automatically generated code
+AudioPlaySdWav           Deck_A;     //xy=68.99999237060547,394.99995136260986
+AudioPlaySdWav           Deck_B; //xy=70,464.0000057220459
+AudioFilterBiquad        Filter_BL; //xy=278.99999237060547,455.9999942779541
+AudioFilterBiquad        Filter_BR; //xy=278.9999771118164,501.99998664855957
+AudioFilterBiquad        Filter_AL;        //xy=281.00000381469727,322.00000381469727
+AudioFilterBiquad        Filter_AR; //xy=284,366.0000057220459
+AudioMixer4              Mixer_Master_L;         //xy=831.0000190734863,547.0000076293945
+AudioMixer4              Mixer_Master_R;         //xy=832.0000228881836,623.0000104904175
+AudioMixer4              Mixer_Headphone_R;         //xy=848.0000190734863,340.0000057220459
+AudioMixer4              Mixer_Headphone_L;         //xy=849.0000190734863,258.00000381469727
+AudioAnalyzePeak         VU_Master_R;          //xy=1046.000015258789,672.0000095367432
+AudioAnalyzePeak         VU_Master_L;          //xy=1050.000015258789,457.0000057220459
+AudioOutputI2S2          DAC_Master;         //xy=1295.0061340332031,547.0056114196777
+AudioOutputI2S           DAC_Headphones;           //xy=1298.0059814453125,349.00560665130615
+AudioConnection          patchCord1(Deck_A, 0, Filter_AL, 0);
+AudioConnection          patchCord2(Deck_A, 1, Filter_AR, 0);
+AudioConnection          patchCord3(Deck_B, 0, Filter_BL, 0);
+AudioConnection          patchCord4(Deck_B, 1, Filter_BR, 0);
+AudioConnection          patchCord5(Filter_BL, 0, Mixer_Headphone_L, 1);
+AudioConnection          patchCord6(Filter_BL, 0, Mixer_Master_L, 1);
+AudioConnection          patchCord7(Filter_BR, 0, Mixer_Headphone_R, 1);
+AudioConnection          patchCord8(Filter_BR, 0, Mixer_Master_R, 1);
+AudioConnection          patchCord9(Filter_AL, 0, Mixer_Headphone_L, 0);
+AudioConnection          patchCord10(Filter_AL, 0, Mixer_Master_L, 0);
+AudioConnection          patchCord11(Filter_AR, 0, Mixer_Headphone_R, 0);
+AudioConnection          patchCord12(Filter_AR, 0, Mixer_Master_R, 0);
+AudioConnection          patchCord13(Mixer_Master_L, VU_Master_L);
+AudioConnection          patchCord14(Mixer_Master_L, 0, DAC_Master, 0);
+AudioConnection          patchCord15(Mixer_Master_R, VU_Master_R);
+AudioConnection          patchCord16(Mixer_Master_R, 0, DAC_Master, 1);
+AudioConnection          patchCord17(Mixer_Headphone_R, 0, DAC_Headphones, 1);
+AudioConnection          patchCord18(Mixer_Headphone_L, 0, DAC_Headphones, 0);
+// GUItool: end automatically generated code
