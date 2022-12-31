@@ -20,7 +20,7 @@ class display_driver {
 
   screen* active_screen();
 
-  void push_screen(screen* screen);
+  void open_screen(screen* screen);
 
   void update();
 

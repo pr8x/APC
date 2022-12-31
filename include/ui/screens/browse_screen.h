@@ -1,5 +1,5 @@
 #pragma once
-#include <controls.h>
+#include <controls/controls.h>
 #include <ui/export/ui.h>
 #include <ui/screen.h>
 #include <usb_drive.h>

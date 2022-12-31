@@ -37,6 +37,9 @@ extern lv_obj_t * ui_MixerScreen_DeckB_Waveform;
 extern lv_obj_t * ui_MixerScreen_DeckB_TrackLabel;
 extern lv_obj_t * ui_MixerScreen_DeckB_ArtistLabel;
 extern lv_obj_t * ui_MixerScreen_DeckB_BPMLabel;
+extern lv_obj_t * ui_DiagScreen;
+extern lv_obj_t * ui_DiagScreen_Label;
+extern lv_obj_t * ui_DiagScreen_Chart;
 
 
 LV_IMG_DECLARE(ui_img_rr_png);    // assets\rr.png

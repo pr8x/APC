@@ -10,6 +10,7 @@
 #include <cassert>
 #include <vector>
 
+
 struct apc::ui::display_driver::impl {
   impl(const display_config& config)
       : tft(config.cs, config.dc, config.mosi, config.sclk, config.rst) {
@@ -59,7 +60,7 @@ apc::ui::screen* apc::ui::display_driver::active_screen() {
   return _impl->screenStack.back();
 }
 
-void apc::ui::display_driver::push_screen(screen* screen) {
+void apc::ui::display_driver::open_screen(screen* screen) {
   auto activeScreen = active_screen();
 
   if (activeScreen != nullptr) {

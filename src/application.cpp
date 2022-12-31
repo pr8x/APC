@@ -1,10 +1,10 @@
 #include <Arduino.h>
+#include <AudioSampleGong.h>
 #include <TimeLib.h>
 #include <application.h>
+#include <config.h>
 
 namespace {
-constexpr apc::ui::display_config DefaultDisplayConfig{10, 9, 11, 14, 8};
-
 void setup_serial() {
   Serial.begin(9600);
 
@@ -37,19 +37,41 @@ apc::application::application()
 
         return true;
       }()),
-      _display(DefaultDisplayConfig),
-      // _deckA(&_audioGraph.Deck_A),
-      // _deckB(&_audioGraph.Deck_B),
+      _display(DisplayConfig),
+      _controls(ControlsMux1Config),
+      _deckA(&_audioGraph.Deck_A, &_audioGraph.Amp_AL, &_audioGraph.Amp_AR),
+      _deckB(&_audioGraph.Deck_B, &_audioGraph.Amp_BL, &_audioGraph.Amp_BR),
+      _mixerScreen(&_display, &_browseScreen, &_controls),
       _browseScreen(&_controls, &_usb) {
   _browseScreen.set_browse_callback(
       [this](const char* f) { on_browse_selection(f); });
-  _display.push_screen(&_mixerScreen);
+  _display.open_screen(&_mixerScreen);
+
+  AudioMemory(10);
+
+  _audioGraph.Mixer_Master_L.gain(0, 0.5);
+  _audioGraph.Mixer_Master_L.gain(1, 0.5);
+
+  _audioGraph.Mixer_Master_R.gain(0, 0.5);
+  _audioGraph.Mixer_Master_R.gain(1, 0.5);
+
+  // _audioGraph.Filter_AL.setLowpass(0, 800, 0.707);
+  // _audioGraph.Filter_AR.setLowpass(0, 800, 0.707);
+
+  _deckA.set_volume(1.0f);
 }
 
 void apc::application::update() {
-  if (_display.active_screen() != &_browseScreen &&
-      _controls.browse_knob.delta() != 0) {
-    _display.push_screen(&_browseScreen);
+  if (!_deckA.is_playing()) {
+    _deckA.load_track(AudioSampleGong);
+  }
+
+  if (_controls.menu_button.is_down()) {
+    if (_display.active_screen() == &_diagScreen) {
+      _diagScreen.close();
+    } else {
+      _display.open_screen(&_diagScreen);
+    }
   }
 
   _usb.update();
