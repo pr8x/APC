@@ -9,7 +9,7 @@ class usb_drive {
   usb_drive();
   ~usb_drive();
 
-  const uint8_t* product_name();
+  const char* product_name();
 
   bool is_connected();
 

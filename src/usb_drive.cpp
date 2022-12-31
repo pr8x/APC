@@ -27,8 +27,8 @@ apc::usb_drive::usb_drive() { _impl = std::make_unique<impl>(); }
 
 apc::usb_drive::~usb_drive() = default;
 
-const uint8_t* apc::usb_drive::product_name() {
-  return _impl->drive.msDriveInfo.inquiry.ProductID;
+const char* apc::usb_drive::product_name() {
+  return reinterpret_cast<const char*>(_impl->drive.msDriveInfo.inquiry.ProductID);
 }
 
 bool apc::usb_drive::is_connected() { return _impl->driveConnected; }
@@ -44,7 +44,7 @@ void apc::usb_drive::update() {
 
   if (!_impl->driveConnected && isDriveAvailable) {
     _impl->driveConnected = true;
-    Serial.printf("Device connected: %16.16s\n", product_name());
+    Serial.printf("Device connected: %s\n", product_name());
   } else if (_impl->driveConnected && !isDriveAvailable) {
     _impl->driveConnected = false;
     Serial.println("Device disconnected");

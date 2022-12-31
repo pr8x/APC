@@ -41,6 +41,7 @@ apc::application::application()
       _controls(ControlsMux1Config),
       _deckA(&_audioGraph.Deck_A, &_audioGraph.Amp_AL, &_audioGraph.Amp_AR),
       _deckB(&_audioGraph.Deck_B, &_audioGraph.Amp_BL, &_audioGraph.Amp_BR),
+      _diagScreen(&_usb),
       _mixerScreen(&_display, &_browseScreen, &_controls),
       _browseScreen(&_controls, &_usb) {
   _browseScreen.set_browse_callback(

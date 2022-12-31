@@ -1,11 +1,12 @@
 #pragma once
 #include <Audio.h>
+#include <InternalTemperature.h>
 #include <TimeLib.h>
 #include <application.h>
 #include <stdio.h>
 #include <ui/export/ui.h>
 #include <ui/screen.h>
-#include <InternalTemperature.h>
+#include <usb_drive.h>
 
 namespace apc {
 namespace ui {
@@ -13,8 +14,9 @@ namespace screens {
 
 class diag_screen : public screen {
  public:
-  diag_screen() : screen(ui_DiagScreen) {
+  diag_screen(usb_drive* usb) : screen(ui_DiagScreen) {
     _appStartTime = now();
+    _usb = usb;
     lv_chart_set_type(ui_DiagScreen_Chart, LV_CHART_TYPE_LINE);
   }
 
@@ -27,8 +29,12 @@ class diag_screen : public screen {
     float internalTemp = InternalTemperature.readTemperatureC();
 
     char statsBuf[2048];
-    sprintf(statsBuf, "Audio CPU: %.2f%%\nAudio Memory: %dkB\nUptime: %s\nTemperature: %.2f°C",
-            AudioProcessorUsage(), AudioMemoryUsage() / 1024, uptimeBuf);
+    sprintf(
+        statsBuf,
+        "Uptime: %s\nAudio CPU: %.2f%%\nAudio Memory: %dkB\nTemperature: %.2fC\nUSB: %s",
+        uptimeBuf, AudioProcessorUsage(), AudioMemoryUsage() / 1024,
+        internalTemp,
+        _usb->is_connected() ? _usb->product_name() : "<No USB>");
 
     lv_label_set_text(ui_DiagScreen_Label, statsBuf);
   }
@@ -36,6 +42,7 @@ class diag_screen : public screen {
   const char* name() override { return "diag screen"; }
 
  private:
+  usb_drive* _usb;
   time_t _appStartTime;
 };
 
