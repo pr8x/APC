@@ -20,7 +20,7 @@ class application {
   void update();
 
  private:
-  void on_browse_selection(const char* file);
+  void on_browse_selection(File file);
 
   bool _running;
 

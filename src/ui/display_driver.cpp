@@ -10,7 +10,6 @@
 #include <cassert>
 #include <vector>
 
-
 struct apc::ui::display_driver::impl {
   impl(const display_config& config)
       : tft(config.cs, config.dc, config.mosi, config.sclk, config.rst) {
@@ -84,4 +83,6 @@ void apc::ui::display_driver::open_screen(screen* screen) {
 
     lv_disp_load_scr(nextScreen->get_object());
   });
+
+  screen->load();
 }

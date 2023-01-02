@@ -1,52 +1,44 @@
 #include <USBHost_t36.h>
 #include <usb_drive.h>
 
-struct apc::usb_drive::impl {
-  impl()
-      : hub1(usbhost),
-        hub2(usbhost),
-        hub3(usbhost),
-        hub4(usbhost),
-        drive(usbhost),
-        partition(usbhost) {
-    Serial.println("Initializing usb host...");
-    usbhost.begin();
-  }
+namespace {
+USBHost usbhost;
+USBHub hub1(usbhost);
+USBHub hub2(usbhost);
+USBHub hub3(usbhost);
+USBHub hub4(usbhost);
+USBDrive drive(usbhost);
+USBFilesystem partition(usbhost);
+}  // namespace
 
-  USBHost usbhost;
-  USBHub hub1;
-  USBHub hub2;
-  USBHub hub3;
-  USBHub hub4;
-  USBDrive drive;
-  USBFilesystem partition;
-  bool driveConnected = false;
-};
-
-apc::usb_drive::usb_drive() { _impl = std::make_unique<impl>(); }
+apc::usb_drive::usb_drive() {
+  Serial.println("Initializing usb host...");
+  usbhost.begin();
+}
 
 apc::usb_drive::~usb_drive() = default;
 
-const char* apc::usb_drive::product_name() {
-  return reinterpret_cast<const char*>(_impl->drive.msDriveInfo.inquiry.ProductID);
-}
+const char* apc::usb_drive::product_name() { return _productNameNT; }
 
-bool apc::usb_drive::is_connected() { return _impl->driveConnected; }
+bool apc::usb_drive::is_connected() { return _driveConnected; }
 
-File apc::usb_drive::openPath(const char* path) {
-  return _impl->partition.open(path);
-}
+bool apc::usb_drive::is_busy() { return drive.isBusy(); }
+
+File apc::usb_drive::openPath(const char* path) { return partition.open(path); }
 
 void apc::usb_drive::update() {
-  _impl->usbhost.Task();
+  usbhost.Task();
 
-  bool isDriveAvailable = _impl->partition;
+  bool isDriveAvailable = drive && partition;
 
-  if (!_impl->driveConnected && isDriveAvailable) {
-    _impl->driveConnected = true;
-    Serial.printf("Device connected: %s\n", product_name());
-  } else if (_impl->driveConnected && !isDriveAvailable) {
-    _impl->driveConnected = false;
-    Serial.println("Device disconnected");
+  if (!_driveConnected && isDriveAvailable) {
+    _driveConnected = true;
+
+    memcpy(_productNameNT, drive.msDriveInfo.inquiry.ProductID, 16);
+
+    Serial.printf("USB device connected: %s\n", product_name());
+  } else if (_driveConnected && !isDriveAvailable) {
+    _driveConnected = false;
+    Serial.println("USB device disconnected");
   }
 }

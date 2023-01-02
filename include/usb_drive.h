@@ -1,6 +1,7 @@
 #pragma once
-#include <memory>
 #include <FS.h>
+
+#include <memory>
 
 namespace apc {
 
@@ -13,13 +14,15 @@ class usb_drive {
 
   bool is_connected();
 
+  bool is_busy();
+
   File openPath(const char* path);
 
   void update();
 
  private:
-  struct impl;
-  std::unique_ptr<impl> _impl;
+  char _productNameNT[17] = {'\0'};
+  bool _driveConnected = false;
 };
 
 }  // namespace apc

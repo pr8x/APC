@@ -1,5 +1,6 @@
 #pragma once
 #include <lvgl.h>
+
 #include <functional>
 
 namespace apc {
@@ -23,6 +24,8 @@ class screen {
   virtual void update() {}
 
   virtual const char* name() = 0;
+
+  virtual void load() {}
 
   virtual void close() {
     if (_closeCallback != nullptr) {

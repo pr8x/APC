@@ -45,7 +45,7 @@ apc::application::application()
       _mixerScreen(&_display, &_browseScreen, &_controls),
       _browseScreen(&_controls, &_usb) {
   _browseScreen.set_browse_callback(
-      [this](const char* f) { on_browse_selection(f); });
+      [this](File f) { on_browse_selection(f); });
   _display.open_screen(&_mixerScreen);
 
   AudioMemory(10);
@@ -63,9 +63,9 @@ apc::application::application()
 }
 
 void apc::application::update() {
-  if (!_deckA.is_playing()) {
-    _deckA.load_track(AudioSampleGong);
-  }
+  // if (!_deckA.is_playing()) {
+  //   _deckA.load_track(AudioSampleGong);
+  // }
 
   if (_controls.menu_button.is_down()) {
     if (_display.active_screen() == &_diagScreen) {
@@ -79,6 +79,6 @@ void apc::application::update() {
   _display.update();
 }
 
-void apc::application::on_browse_selection(const char* file) {
-  Serial.printf("on_browse_selection: %s\n", file);
+void apc::application::on_browse_selection(File file) {
+  Serial.printf("on_browse_selection: %s\n", file.name());
 }
