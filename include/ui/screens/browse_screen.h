@@ -1,12 +1,12 @@
 #pragma once
 #include <controls/controls.h>
+#include <string.h>
 #include <ui/export/ui.h>
 #include <ui/screen.h>
 #include <usb_drive.h>
 #include <util.h>
 
 #include <functional>
-#include <stack>
 #include <vector>
 
 namespace apc {
@@ -29,7 +29,17 @@ class browse_screen : public screen {
 
   void load() override {
     lv_label_set_text(ui_BrowseScreen_USBLabel, _usbDrive->product_name());
-    load_files(_usbDrive->openPath("/"));
+
+    auto root = _usbDrive->openPath("/");
+    load_files(root);
+
+    _currentPath.push_back(root);
+    update_path_label();
+  }
+
+  void close() override {
+    _files.clear();
+    _currentPath.clear();
   }
 
   void set_browse_callback(std::function<void(File)> callback) {
@@ -54,28 +64,31 @@ class browse_screen : public screen {
         lv_obj_remove_style(oldItem, &_lbItemStyleSelected, 0);
       }
 
-      _lbSelection =
+      auto index =
           clamp<uint32_t>(_lbSelection + bkd, 0,
-                          lv_obj_get_child_cnt(ui_BrowseScreen_FilesPanel));
+                          lv_obj_get_child_cnt(ui_BrowseScreen_FilesPanel) - 1);
 
-      Serial.printf("Selection: %d\n", _lbSelection);
-
-      auto currentItem =
-          lv_obj_get_child(ui_BrowseScreen_FilesPanel, _lbSelection);
-
-      lv_obj_add_style(currentItem, &_lbItemStyleSelected, 0);
+      select_item(index);
     }
 
     if (_controls->browse_knob.button.is_down()) {
       //".."
       if (!isRoot && _lbSelection == 0) {
-        _currentPath.pop();
-        load_files(_currentPath.top());
+        Serial.println("Navigating to parent directory");
+
+        _currentPath.pop_back();
+        load_files(_currentPath.back());
+        update_path_label();
       } else {
-        auto selectedFile = _files[_lbSelection - (isRoot ? 0 : 1)];
+        auto& selectedFile = _files[_lbSelection - (isRoot ? 0 : 1)];
 
         if (selectedFile.isDirectory()) {
+          Serial.printf("Opening directory: %s\n", selectedFile.name());
+
+          _currentPath.push_back(selectedFile);
+
           load_files(selectedFile);
+          update_path_label();
         } else {
           if (_browseCallback != nullptr) {
             _browseCallback(selectedFile);
@@ -86,14 +99,25 @@ class browse_screen : public screen {
     }
   }
 
-  void load_files(File root) {
-    _files.clear();
-    _currentPath.push(root);
+  void update_path_label() {
+    char path[1024] = {'\0'};
+    char* p = path;
 
-    for (uint32_t i = 0; i < lv_obj_get_child_cnt(ui_BrowseScreen_FilesPanel);
-         i++) {
-      lv_obj_del(lv_obj_get_child(ui_BrowseScreen_FilesPanel, i));
+    for (auto& f : _currentPath) {
+      auto fileName = f.name();
+      auto len = strlen(fileName);
+      memcpy(p, fileName, len);
+      p += len;
+      *(p) = '/';
     }
+
+    lv_label_set_text(ui_BrowseScreen_PathLabel, path);
+  }
+
+  void load_files(File& root) {
+    _files.clear();
+
+    lv_obj_clean(ui_BrowseScreen_FilesPanel);
 
     if (_currentPath.size() > 1) {
       lv_list_add_text(ui_BrowseScreen_FilesPanel, "..");
@@ -101,17 +125,31 @@ class browse_screen : public screen {
 
     File entry;
 
+    root.rewindDirectory();
+
     while ((entry = root.openNextFile())) {
       Serial.printf("File: %s\n", entry.name());
-      _files.push_back(entry);
       lv_list_add_text(ui_BrowseScreen_FilesPanel, entry.name());
-    }
+      _files.push_back(entry);
+    } 
+
+    select_item(0);
+  }
+
+  void select_item(int index) {
+    auto currentItem = lv_obj_get_child(ui_BrowseScreen_FilesPanel, index);
+
+    Serial.printf("Selection: %d\n", index);
+
+    lv_obj_add_style(currentItem, &_lbItemStyleSelected, 0);
+
+    _lbSelection = index;
   }
 
  private:
   lv_style_t _lbItemStyleSelected;
 
-  std::stack<File> _currentPath;
+  std::vector<File> _currentPath;
   std::vector<File> _files;
   int _lbSelection = -1;
 

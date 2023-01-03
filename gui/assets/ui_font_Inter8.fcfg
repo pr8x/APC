@@ -1,0 +1,16 @@
+{
+  "codename": "Inter8",
+  "ttf_path": "\\assets\\Inter-Regular.ttf",
+  "bin_path": "\\assets\\ui_font_Inter8.bin",
+  "c_path": "\\assets\\ui_font_Inter8.c",
+  "cfg_path": "\\assets\\ui_font_Inter8.fcfg",
+  "size": 8,
+  "bpp": 1,
+  "letters": 3,
+  "ranges": [
+    "0x20-0xff"
+  ],
+  "symbols": "äöüß",
+  "customparams": "--no-compress --no-prefilter",
+  "uploaded": false
+}

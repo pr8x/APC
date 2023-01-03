@@ -17,7 +17,6 @@ class diag_screen : public screen {
   diag_screen(usb_drive* usb) : screen(ui_DiagScreen) {
     _appStartTime = now();
     _usb = usb;
-    lv_chart_set_type(ui_DiagScreen_Chart, LV_CHART_TYPE_LINE);
   }
 
   void update() override {

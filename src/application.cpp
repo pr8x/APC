@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <AudioSampleGong.h>
 #include <TimeLib.h>
 #include <application.h>
 #include <config.h>
@@ -18,7 +17,7 @@ void setup_serial() {
 time_t get_teensy_time() { return Teensy3Clock.get(); }
 
 void sync_with_RTC() {
-  // set the Time library to use Teensy 3.0's RTC to keep time
+  // set the Time library to use Teensy RTC to keep time
   setSyncProvider(get_teensy_time);
 
   if (timeStatus() != timeSet) {
