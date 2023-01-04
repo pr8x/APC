@@ -28,6 +28,8 @@ class browse_screen : public screen {
   const char* name() override { return "browse screen"; }
 
   void load() override {
+    screen::load();
+
     lv_label_set_text(ui_BrowseScreen_USBLabel, _usbDrive->product_name());
 
     auto root = _usbDrive->openPath("/");
@@ -38,15 +40,19 @@ class browse_screen : public screen {
   }
 
   void close() override {
+    screen::close();
+    
     _files.clear();
     _currentPath.clear();
   }
 
   void set_browse_callback(std::function<void(File)> callback) {
-    _browseCallback = callback;
+    _browseCallback = std::move(callback);
   }
 
   void update() override {
+    screen::update();
+
     if (_usbDrive->is_busy()) {
       lv_obj_clear_flag(ui_BrowseScreen_USBIndicator, LV_OBJ_FLAG_HIDDEN);
     } else {
@@ -90,6 +96,8 @@ class browse_screen : public screen {
           load_files(selectedFile);
           update_path_label();
         } else {
+          Serial.printf("Selected file: %s\n", selectedFile.name());
+
           if (_browseCallback != nullptr) {
             _browseCallback(selectedFile);
           }
@@ -128,12 +136,28 @@ class browse_screen : public screen {
     root.rewindDirectory();
 
     while ((entry = root.openNextFile())) {
-      Serial.printf("File: %s\n", entry.name());
+      bool isSupported = filter_file(entry);
+      Serial.printf("File: %s (Supported: %d)\n", entry.name(), isSupported);
+
+      if (!isSupported) {
+        continue;
+      }
+
       lv_list_add_text(ui_BrowseScreen_FilesPanel, entry.name());
       _files.push_back(entry);
-    } 
+    }
 
     select_item(0);
+  }
+
+  bool filter_file(File& file) {
+    if (file.isDirectory()) {
+      return true;
+    }
+
+    auto fe = strrchr(file.name(), '.');
+
+    return strcmp(fe, ".wav") == 0 || strcmp(fe, ".mp3") == 0;
   }
 
   void select_item(int index) {
