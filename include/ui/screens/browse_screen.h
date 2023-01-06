@@ -9,9 +9,7 @@
 #include <functional>
 #include <vector>
 
-namespace apc {
-namespace ui {
-namespace screens {
+namespace apc::ui::screens {
 
 class browse_screen : public screen {
  public:
@@ -21,8 +19,8 @@ class browse_screen : public screen {
     _usbDrive = usbDrive;
 
     lv_style_init(&_lbItemStyleSelected);
-    lv_style_set_bg_color(&_lbItemStyleSelected,
-                          lv_palette_main(LV_PALETTE_RED));
+    lv_style_set_bg_color(
+        &_lbItemStyleSelected, lv_palette_main(LV_PALETTE_RED));
   }
 
   const char* name() override { return "browse screen"; }
@@ -41,7 +39,7 @@ class browse_screen : public screen {
 
   void close() override {
     screen::close();
-    
+
     _files.clear();
     _currentPath.clear();
   }
@@ -70,9 +68,10 @@ class browse_screen : public screen {
         lv_obj_remove_style(oldItem, &_lbItemStyleSelected, 0);
       }
 
-      auto index =
-          clamp<uint32_t>(_lbSelection + bkd, 0,
-                          lv_obj_get_child_cnt(ui_BrowseScreen_FilesPanel) - 1);
+      auto index = clamp<uint32_t>(
+          _lbSelection + bkd,
+          0,
+          lv_obj_get_child_cnt(ui_BrowseScreen_FilesPanel) - 1);
 
       select_item(index);
     }
@@ -183,6 +182,4 @@ class browse_screen : public screen {
   std::function<void(File)> _browseCallback;
 };
 
-}  // namespace screens
-}  // namespace ui
-}  // namespace apc
+}  // namespace apc::ui::screens

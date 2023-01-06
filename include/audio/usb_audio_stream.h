@@ -17,7 +17,10 @@ class usb_audio_stream : public AudioStream {
 
   void pause() {}
 
-  void stop() { _state = playback_state::stopped; }
+  void stop() {
+    _state = playback_state::stopped;
+    Serial.println("playback stopped");
+  }
 
   playback_state state() { return _state; }
 
@@ -25,6 +28,7 @@ class usb_audio_stream : public AudioStream {
     _file = std::move(file);
     _decoder = std::make_unique<mp3_decoder<SampleBlockSize>>(file);
     _state = playback_state::playing;
+     Serial.println("playback started");
   }
 
   void update() override {
@@ -38,13 +42,16 @@ class usb_audio_stream : public AudioStream {
 
     gsl::span<int16_t> block = _decoder->read_next_block();
 
+    Serial.printf("decoded block received: %d\n", block.size());
+
     // TODO: Do not dicard last incomplete frame
     if (block.size() < SampleBlockSize) {
+      Serial.printf("decoded block too small");
       stop();
       return;
     }
 
-    for (int i = 0; i < SampleBlockSize / 2; i++) {
+    for (size_t i = 0; i < SampleBlockSize / 2; i++) {
       lb->data[i] = block[i * 2];
       rb->data[i] = block[i * 2 + 1];
     }
