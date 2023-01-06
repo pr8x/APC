@@ -4,7 +4,7 @@
 #include <SPI.h>
 #include <SerialFlash.h>
 #include <Wire.h>
-#include <audio/play_usb_wav.h>
+#include <audio/usb_audio_stream.h>
 #include <config.h>
 
 namespace apc {
@@ -17,8 +17,8 @@ class audio_graph {
     AudioMemory(AudioMemoryBlocks);
   }
 
-  AudioPlayUSBWav Deck_A;         // xy=68.00569152832031,405.0056571960449
-  AudioPlayUSBWav Deck_B;         // xy=73.00569152832031,453.0056571960449
+  usb_audio_stream Deck_A;         // xy=68.00569152832031,405.0056571960449
+  usb_audio_stream Deck_B;         // xy=73.00569152832031,453.0056571960449
   AudioAmplifier Amp_AL;          // xy=319.00566482543945,353.1874942779541
   AudioAmplifier Amp_AR;          // xy=324.00567626953125,402.1875
   AudioAmplifier Amp_BR;          // xy=327.00567626953125,516.1875
