@@ -9,7 +9,9 @@
 #include <functional>
 #include <vector>
 
-namespace apc::ui::screens {
+namespace apc {
+namespace ui {
+namespace screens {
 
 class browse_screen : public screen {
  public:
@@ -182,4 +184,6 @@ class browse_screen : public screen {
   std::function<void(File)> _browseCallback;
 };
 
-}  // namespace apc::ui::screens
+}  // namespace screens
+}  // namespace ui
+}  // namespace apc

@@ -8,7 +8,8 @@
 #include <cassert>
 #include <gsl/span>
 
-namespace apc::audio {
+namespace apc {
+namespace audio {
 
 template <size_t SampleBlockSize>
 class mp3_decoder {
@@ -124,4 +125,5 @@ class mp3_decoder {
   size_t _fileSize{0};
 };
 
-}  // namespace apc::audio
+}  // namespace audio
+}  // namespace apc
