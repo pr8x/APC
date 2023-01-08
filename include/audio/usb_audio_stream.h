@@ -65,7 +65,7 @@ class usb_audio_stream : public AudioStream {
 
   std::unique_ptr<mp3_decoder<SampleBlockSize>> _decoder;
   File _file;
-  playback_state _state;
+  playback_state _state = playback_state::stopped;
 };
 
 }  // namespace audio
