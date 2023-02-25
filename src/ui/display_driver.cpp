@@ -1,6 +1,6 @@
 #include <Adafruit_GFX.h>        // Core graphics library
 #include <Adafruit_LvGL_Glue.h>  // Glue library header INCLUDE THIS FIRST!
-#include <Adafruit_ST7735.h>     // Hardware-specific library
+#include <Adafruit_ST7789.h>     // Hardware-specific library
 #include <FS.h>
 #include <SPI.h>
 #include <lvgl.h>
@@ -15,9 +15,10 @@ struct apc::ui::display_driver::impl {
       : tft(config.cs, config.dc, config.mosi, config.sclk, config.rst) {
     Serial.println("Initializing graphics driver...");
 
-    tft.initR(INITR_GREENTAB);
-    tft.setRotation(1);
-    tft.setTextColor(ST7735_WHITE);
+    tft.init(240, 320); 
+    tft.setRotation(3);
+    tft.setTextColor(ST77XX_WHITE);
+    tft.invertDisplay(false);
 
     Serial.println("Initializing LVGL glue...");
 
@@ -33,7 +34,7 @@ struct apc::ui::display_driver::impl {
     ui_init();
   }
 
-  Adafruit_ST7735 tft;
+  Adafruit_ST7789 tft;
   Adafruit_LvGL_Glue glue;
   std::vector<screen*> screenStack;
 };

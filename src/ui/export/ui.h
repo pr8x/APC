@@ -48,6 +48,7 @@ LV_IMG_DECLARE(ui_img_rr_png);    // assets\rr.png
 LV_FONT_DECLARE(ui_font_Inter11);
 LV_FONT_DECLARE(ui_font_Inter11Bold);
 LV_FONT_DECLARE(ui_font_Inter8);
+LV_FONT_DECLARE(ui_font_Inter14);
 
 
 void ui_init(void);

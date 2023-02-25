@@ -48,6 +48,8 @@ void ui_SplashScreen_screen_init(void)
     lv_img_set_src(ui_SplashScreen_Image, &ui_img_rr_png);
     lv_obj_set_width(ui_SplashScreen_Image, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_SplashScreen_Image, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_SplashScreen_Image, -1);
+    lv_obj_set_y(ui_SplashScreen_Image, -5);
     lv_obj_set_align(ui_SplashScreen_Image, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_SplashScreen_Image, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(ui_SplashScreen_Image, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
@@ -59,15 +61,15 @@ void ui_BrowseScreen_screen_init(void)
     lv_obj_clear_flag(ui_BrowseScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     ui_BrowseScreen_USBLabel = lv_label_create(ui_BrowseScreen);
-    lv_obj_set_height(ui_BrowseScreen_USBLabel, 16);
+    lv_obj_set_height(ui_BrowseScreen_USBLabel, 15);
     lv_obj_set_width(ui_BrowseScreen_USBLabel, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_x(ui_BrowseScreen_USBLabel, 9);
-    lv_obj_set_y(ui_BrowseScreen_USBLabel, 8);
+    lv_obj_set_x(ui_BrowseScreen_USBLabel, 5);
+    lv_obj_set_y(ui_BrowseScreen_USBLabel, 10);
     lv_label_set_text(ui_BrowseScreen_USBLabel, "JetFlash USB 32GB\n\n");
-    lv_obj_set_style_text_font(ui_BrowseScreen_USBLabel, &ui_font_Inter11, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_BrowseScreen_USBLabel, &ui_font_Inter14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_BrowseScreen_FilesPanel = lv_list_create(ui_BrowseScreen);
-    lv_obj_set_height(ui_BrowseScreen_FilesPanel, 87);
+    ui_BrowseScreen_FilesPanel = lv_obj_create(ui_BrowseScreen);
+    lv_obj_set_height(ui_BrowseScreen_FilesPanel, 180);
     lv_obj_set_width(ui_BrowseScreen_FilesPanel, lv_pct(100));
     lv_obj_set_align(ui_BrowseScreen_FilesPanel, LV_ALIGN_BOTTOM_LEFT);
     lv_obj_clear_flag(ui_BrowseScreen_FilesPanel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
@@ -75,10 +77,10 @@ void ui_BrowseScreen_screen_init(void)
     lv_obj_set_style_border_width(ui_BrowseScreen_FilesPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_BrowseScreen_USBIndicator = lv_spinner_create(ui_BrowseScreen, 1000, 90);
-    lv_obj_set_width(ui_BrowseScreen_USBIndicator, 18);
-    lv_obj_set_height(ui_BrowseScreen_USBIndicator, 16);
-    lv_obj_set_x(ui_BrowseScreen_USBIndicator, -7);
-    lv_obj_set_y(ui_BrowseScreen_USBIndicator, 11);
+    lv_obj_set_width(ui_BrowseScreen_USBIndicator, 24);
+    lv_obj_set_height(ui_BrowseScreen_USBIndicator, 24);
+    lv_obj_set_x(ui_BrowseScreen_USBIndicator, -10);
+    lv_obj_set_y(ui_BrowseScreen_USBIndicator, 15);
     lv_obj_set_align(ui_BrowseScreen_USBIndicator, LV_ALIGN_TOP_RIGHT);
     lv_obj_clear_flag(ui_BrowseScreen_USBIndicator, LV_OBJ_FLAG_CLICKABLE);      /// Flags
 
@@ -87,12 +89,12 @@ void ui_BrowseScreen_screen_init(void)
     ui_BrowseScreen_PathLabel = lv_label_create(ui_BrowseScreen);
     lv_obj_set_height(ui_BrowseScreen_PathLabel, 12);
     lv_obj_set_width(ui_BrowseScreen_PathLabel, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_x(ui_BrowseScreen_PathLabel, 9);
-    lv_obj_set_y(ui_BrowseScreen_PathLabel, 24);
+    lv_obj_set_x(ui_BrowseScreen_PathLabel, 5);
+    lv_obj_set_y(ui_BrowseScreen_PathLabel, 33);
     lv_label_set_text(ui_BrowseScreen_PathLabel, "Techno/Banger/Rave22_02\n\n\n");
     lv_obj_set_style_text_color(ui_BrowseScreen_PathLabel, lv_color_hex(0x808080), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_BrowseScreen_PathLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_BrowseScreen_PathLabel, &ui_font_Inter8, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_BrowseScreen_PathLabel, &ui_font_Inter11, LV_PART_MAIN | LV_STATE_DEFAULT);
 
 }
 void ui_MixerScreen_screen_init(void)
@@ -107,7 +109,7 @@ void ui_MixerScreen_screen_init(void)
     lv_obj_set_y(ui_MixerScreen_DeckA_TrackLabel, 5);
     lv_label_set_long_mode(ui_MixerScreen_DeckA_TrackLabel, LV_LABEL_LONG_SCROLL);
     lv_label_set_text(ui_MixerScreen_DeckA_TrackLabel, "Pressor 2600 (Original Mix)");
-    lv_obj_set_style_text_font(ui_MixerScreen_DeckA_TrackLabel, &ui_font_Inter11, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_MixerScreen_DeckA_TrackLabel, &ui_font_Inter14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_MixerScreen_DeckA_ArtistLabel = lv_label_create(ui_MixerScreen);
     lv_obj_set_width(ui_MixerScreen_DeckA_ArtistLabel, LV_SIZE_CONTENT);   /// 1
@@ -118,35 +120,35 @@ void ui_MixerScreen_screen_init(void)
     lv_label_set_text(ui_MixerScreen_DeckA_ArtistLabel, "SAMOH");
     lv_obj_set_style_text_color(ui_MixerScreen_DeckA_ArtistLabel, lv_color_hex(0x808080), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_MixerScreen_DeckA_ArtistLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_MixerScreen_DeckA_ArtistLabel, &ui_font_Inter11, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_MixerScreen_DeckA_ArtistLabel, &ui_font_Inter14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_MixerScreen_DeckA_BPMLabel = lv_label_create(ui_MixerScreen);
     lv_obj_set_width(ui_MixerScreen_DeckA_BPMLabel, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_MixerScreen_DeckA_BPMLabel, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_x(ui_MixerScreen_DeckA_BPMLabel, -5);
-    lv_obj_set_y(ui_MixerScreen_DeckA_BPMLabel, 22);
+    lv_obj_set_y(ui_MixerScreen_DeckA_BPMLabel, 12);
     lv_obj_set_align(ui_MixerScreen_DeckA_BPMLabel, LV_ALIGN_TOP_RIGHT);
     lv_label_set_long_mode(ui_MixerScreen_DeckA_BPMLabel, LV_LABEL_LONG_CLIP);
     lv_label_set_text(ui_MixerScreen_DeckA_BPMLabel, "145");
     lv_obj_set_style_text_color(ui_MixerScreen_DeckA_BPMLabel, lv_color_hex(0x02D23E), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_MixerScreen_DeckA_BPMLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_MixerScreen_DeckA_BPMLabel, &ui_font_Inter11, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_MixerScreen_DeckA_BPMLabel, &ui_font_Inter14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_MixerScreen_DeckA_Waveform = lv_obj_create(ui_MixerScreen);
-    lv_obj_set_height(ui_MixerScreen_DeckA_Waveform, 24);
+    lv_obj_set_height(ui_MixerScreen_DeckA_Waveform, 70);
     lv_obj_set_width(ui_MixerScreen_DeckA_Waveform, lv_pct(100));
     lv_obj_set_x(ui_MixerScreen_DeckA_Waveform, 0);
-    lv_obj_set_y(ui_MixerScreen_DeckA_Waveform, -12);
+    lv_obj_set_y(ui_MixerScreen_DeckA_Waveform, -35);
     lv_obj_set_align(ui_MixerScreen_DeckA_Waveform, LV_ALIGN_LEFT_MID);
     lv_obj_clear_flag(ui_MixerScreen_DeckA_Waveform, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_MixerScreen_DeckA_Waveform, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_side(ui_MixerScreen_DeckA_Waveform, LV_BORDER_SIDE_NONE, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_MixerScreen_DeckB_Waveform = lv_obj_create(ui_MixerScreen);
-    lv_obj_set_height(ui_MixerScreen_DeckB_Waveform, 24);
+    lv_obj_set_height(ui_MixerScreen_DeckB_Waveform, 70);
     lv_obj_set_width(ui_MixerScreen_DeckB_Waveform, lv_pct(100));
     lv_obj_set_x(ui_MixerScreen_DeckB_Waveform, 0);
-    lv_obj_set_y(ui_MixerScreen_DeckB_Waveform, 12);
+    lv_obj_set_y(ui_MixerScreen_DeckB_Waveform, 35);
     lv_obj_set_align(ui_MixerScreen_DeckB_Waveform, LV_ALIGN_LEFT_MID);
     lv_obj_clear_flag(ui_MixerScreen_DeckB_Waveform, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_MixerScreen_DeckB_Waveform, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -163,7 +165,7 @@ void ui_MixerScreen_screen_init(void)
     lv_obj_set_align(ui_MixerScreen_DeckB_TrackLabel, LV_ALIGN_BOTTOM_LEFT);
     lv_label_set_long_mode(ui_MixerScreen_DeckB_TrackLabel, LV_LABEL_LONG_SCROLL);
     lv_label_set_text(ui_MixerScreen_DeckB_TrackLabel, "Make Sense");
-    lv_obj_set_style_text_font(ui_MixerScreen_DeckB_TrackLabel, &ui_font_Inter11, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_MixerScreen_DeckB_TrackLabel, &ui_font_Inter14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_MixerScreen_DeckB_ArtistLabel = lv_label_create(ui_MixerScreen);
     lv_obj_set_width(ui_MixerScreen_DeckB_ArtistLabel, LV_SIZE_CONTENT);   /// 1
@@ -175,19 +177,19 @@ void ui_MixerScreen_screen_init(void)
     lv_label_set_text(ui_MixerScreen_DeckB_ArtistLabel, "VBL7");
     lv_obj_set_style_text_color(ui_MixerScreen_DeckB_ArtistLabel, lv_color_hex(0x808080), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_MixerScreen_DeckB_ArtistLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_MixerScreen_DeckB_ArtistLabel, &ui_font_Inter11, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_MixerScreen_DeckB_ArtistLabel, &ui_font_Inter14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_MixerScreen_DeckB_BPMLabel = lv_label_create(ui_MixerScreen);
     lv_obj_set_width(ui_MixerScreen_DeckB_BPMLabel, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_MixerScreen_DeckB_BPMLabel, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_MixerScreen_DeckB_BPMLabel, -4);
-    lv_obj_set_y(ui_MixerScreen_DeckB_BPMLabel, -4);
+    lv_obj_set_x(ui_MixerScreen_DeckB_BPMLabel, -5);
+    lv_obj_set_y(ui_MixerScreen_DeckB_BPMLabel, -13);
     lv_obj_set_align(ui_MixerScreen_DeckB_BPMLabel, LV_ALIGN_BOTTOM_RIGHT);
     lv_label_set_long_mode(ui_MixerScreen_DeckB_BPMLabel, LV_LABEL_LONG_CLIP);
     lv_label_set_text(ui_MixerScreen_DeckB_BPMLabel, "145");
     lv_obj_set_style_text_color(ui_MixerScreen_DeckB_BPMLabel, lv_color_hex(0x02D23E), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_MixerScreen_DeckB_BPMLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_MixerScreen_DeckB_BPMLabel, &ui_font_Inter11, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_MixerScreen_DeckB_BPMLabel, &ui_font_Inter14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
 }
 void ui_DiagScreen_screen_init(void)
@@ -201,7 +203,7 @@ void ui_DiagScreen_screen_init(void)
     lv_obj_set_x(ui_DiagScreen_Label, 10);
     lv_obj_set_y(ui_DiagScreen_Label, 12);
     lv_label_set_text(ui_DiagScreen_Label, "Audio CPU: 40%\nAudio Memory: 1KB\nUptime: 2h 44m 10s\n");
-    lv_obj_set_style_text_font(ui_DiagScreen_Label, &ui_font_Inter11, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_DiagScreen_Label, &ui_font_Inter14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
 }
 
