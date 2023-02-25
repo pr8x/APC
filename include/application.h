@@ -18,8 +18,6 @@ class application {
   void update();
 
  private:
-  bool _running;
-
   apc::usb_drive _usb;
   apc::ui::display_driver _display;
   apc::controls _controls;

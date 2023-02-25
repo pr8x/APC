@@ -32,7 +32,7 @@ class browse_screen : public screen {
 
     lv_label_set_text(ui_BrowseScreen_USBLabel, _usbDrive->product_name());
 
-    auto root = _usbDrive->openPath("/");
+    auto root = _usbDrive->open_path("/");
     load_files(root);
 
     _currentPath.push_back(root);
