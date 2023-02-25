@@ -13,11 +13,13 @@ enum class playback_state { playing, paused, stopped };
 
 class usb_audio_stream : public AudioStream {
  public:
-  usb_audio_stream() : AudioStream(1, nullptr) { AudioStartUsingSPI(); }
+  usb_audio_stream() : AudioStream(0, nullptr) { AudioStartUsingSPI(); }
 
   void pause() {}
 
   void stop() {
+    AudioStopUsingSPI();
+
     _state = playback_state::stopped;
     Serial.println("playback stopped");
   }
@@ -25,10 +27,12 @@ class usb_audio_stream : public AudioStream {
   playback_state state() { return _state; }
 
   void play(File file) {
+    AudioStartUsingSPI();
+
     _file = std::move(file);
-    _decoder = std::make_unique<mp3_decoder<SampleBlockSize>>(file);
+    _decoder = std::make_unique<mp3_decoder>(file, SampleBlockSize);
     _state = playback_state::playing;
-     Serial.println("playback started");
+    Serial.println("playback started");
   }
 
   void update() override {
@@ -36,34 +40,42 @@ class usb_audio_stream : public AudioStream {
       return;
     }
 
-    audio_block_t* lb = allocate();
-    audio_block_t* rb = allocate();
-    assert(lb != nullptr && rb != nullptr);
+    auto block = _decoder->read_next_block();
+    auto blockSize = block.leftChannel.size();
+    auto isStereo = !block.rightChannel.empty();
 
-    gsl::span<int16_t> block = _decoder->read_next_block();
-
-    Serial.printf("decoded block received: %d\n", block.size());
+    Serial.printf(
+        "decoded block received: %d stereo: %d\n", blockSize, isStereo);
 
     // TODO: Do not dicard last incomplete frame
-    if (block.size() < SampleBlockSize) {
+    if (blockSize < SampleBlockSize) {
       Serial.printf("decoded block too small");
       stop();
       return;
     }
 
-    for (size_t i = 0; i < SampleBlockSize / 2; i++) {
-      lb->data[i] = block[i * 2];
-      rb->data[i] = block[i * 2 + 1];
-    }
+    assert(blockSize == SampleBlockSize);
 
+    audio_block_t* lb = allocate();
+    assert(lb != nullptr);
+    memcpy(lb->data, block.leftChannel.data(), block.leftChannel.size_bytes());
+    transmit(lb, 0);
     release(lb);
-    release(rb);
+
+    if (isStereo) {
+      audio_block_t* rb = allocate();
+      assert(rb != nullptr);
+      memcpy(
+          rb->data, block.rightChannel.data(), block.rightChannel.size_bytes());
+      transmit(rb, 1);
+      release(rb);
+    }
   }
 
  private:
-  static constexpr size_t SampleBlockSize = AUDIO_BLOCK_SAMPLES * 2;
+  static constexpr size_t SampleBlockSize = AUDIO_BLOCK_SAMPLES;
 
-  std::unique_ptr<mp3_decoder<SampleBlockSize>> _decoder;
+  std::unique_ptr<mp3_decoder> _decoder;
   File _file;
   playback_state _state = playback_state::stopped;
 };
