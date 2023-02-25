@@ -24,7 +24,7 @@ bool apc::usb_drive::is_connected() { return _driveConnected; }
 
 bool apc::usb_drive::is_busy() { return drive.isBusy(); }
 
-File apc::usb_drive::openPath(const char* path) { return partition.open(path); }
+File apc::usb_drive::open_path(const char* path) { return partition.open(path); }
 
 void apc::usb_drive::update() {
   usbhost.Task();
