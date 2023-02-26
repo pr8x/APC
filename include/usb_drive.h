@@ -16,7 +16,7 @@ class usb_drive {
 
   bool is_busy();
 
-  File openPath(const char* path);
+  File open_path(const char* path);
 
   void update();
 
