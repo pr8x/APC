@@ -1,4 +1,6 @@
 #pragma once
+#include <audio/audio_format.h>
+#include <audio/metadata/traktor3_metadata_provider.h>
 #include <controls/controls.h>
 #include <string.h>
 #include <ui/export/ui.h>
@@ -137,11 +139,33 @@ class browse_screen : public screen {
     root.rewindDirectory();
 
     while ((entry = root.openNextFile())) {
-      bool isSupported = filter_file(entry);
-      Serial.printf("File: %s (Supported: %d)\n", entry.name(), isSupported);
+      bool isDirectory = entry.isDirectory();
 
-      if (!isSupported) {
-        continue;
+      if (!isDirectory) {
+        auto audioFormat = get_audio_format(entry);
+        bool isSupported = audioFormat != audio::audio_format::unknown;
+
+        Serial.printf("File: %s (Supported: %d)\n", entry.name(), isSupported);
+
+        if (!isSupported) {
+          continue;
+        }
+
+        if (audioFormat == audio::audio_format::mp3) {
+          Serial.printf("Reading metadata...\n");
+
+          audio::traktor3_metadata_provider metaProvider;
+
+          auto meta = metaProvider.read_metadata(entry);
+
+          Serial.printf(
+              "Metadata:\n  Artist: %s\n  Title: %s\n  Album: %s\n  BPM: %f\n  Key: %s\n",
+              meta.artist.c_str(),
+              meta.title.c_str(),
+              meta.album.c_str(),
+              meta.bpm,
+              meta.key.c_str());
+        }
       }
 
       lv_list_add_text(ui_BrowseScreen_FilesPanel, entry.name());
@@ -151,14 +175,18 @@ class browse_screen : public screen {
     select_item(0);
   }
 
-  bool filter_file(File& file) {
-    if (file.isDirectory()) {
-      return true;
-    }
-
+  audio::audio_format get_audio_format(File& file) {
     auto fe = strrchr(file.name(), '.');
 
-    return strcmp(fe, ".wav") == 0 || strcmp(fe, ".mp3") == 0;
+    if (strcmp(fe, ".wav") == 0) {
+      return audio::audio_format::wav;
+    }
+
+    if (strcmp(fe, ".mp3") == 0) {
+      return audio::audio_format::mp3;
+    }
+
+    return audio::audio_format::unknown;
   }
 
   void select_item(int index) {
