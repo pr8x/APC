@@ -119,8 +119,7 @@ void apc::ui::screens::browse_screen::load_files(File& root) {
   while ((entry = root.openNextFile())) {
     bool isDirectory = entry.isDirectory();
 
-    apc::audio::metadata metadata;
-    apc::audio::metadata* metadataPtr = nullptr;
+    tl::optional<apc::audio::metadata> metadata;
 
     if (!isDirectory) {
       auto audioFormat = get_audio_format(entry);
@@ -136,22 +135,23 @@ void apc::ui::screens::browse_screen::load_files(File& root) {
         Serial.printf("Reading metadata...\n");
 
         metadata = metaProvider.read_metadata(entry);
-        //metadataPtr = &metadata;
 
-        Serial.printf(
-            "Metadata:\n  Artist: %s\n  Title: %s\n  Album: %s\n  BPM: %f\n  "
-            "Key: %s\n",
-            metadata.artist.c_str(),
-            metadata.title.c_str(),
-            metadata.album.c_str(),
-            metadata.bpm,
-            metadata.key.c_str());
+        if (metadata) {
+          Serial.printf(
+              "Metadata:\n  Artist: %s\n  Title: %s\n  Album: %s\n  BPM: %f\n  "
+              "Key: %s\n",
+              metadata->artist.c_str(),
+              metadata->title.c_str(),
+              metadata->album.c_str(),
+              metadata->bpm,
+              metadata->key.c_str());
+        }
       }
     }
 
-    //add_entry_to_list(entry, isDirectory, metadataPtr);
+    add_entry_to_list(entry, isDirectory, metadata);
 
-    lv_list_add_text(ui_BrowseScreen_FilesPanel, entry.name());
+    // lv_list_add_text(ui_BrowseScreen_FilesPanel, entry.name());
 
     _files.push_back(entry);
   }
@@ -160,28 +160,24 @@ void apc::ui::screens::browse_screen::load_files(File& root) {
 }
 
 void apc::ui::screens::browse_screen::add_entry_to_list(
-    File entry, bool isDirectory, audio::metadata* metadata) {
-  lv_obj_t* item = lv_obj_create(ui_BrowseScreen_FilesPanel);
+    File entry, bool isDirectory, tl::optional<audio::metadata> metadata) {
+  auto sg = lv_spangroup_create(ui_BrowseScreen_FilesPanel);
 
-  lv_obj_set_height(item, 20);
+  auto nameLabel = lv_spangroup_new_span(sg);
+  lv_span_set_text(nameLabel, entry.name());
 
-  lv_obj_t* nameLabel = lv_label_create(item);
-  lv_label_set_text(nameLabel, entry.name());
-  lv_obj_set_align(nameLabel, LV_DIR_LEFT);
-
-  if (!isDirectory && metadata != nullptr) {
-    lv_obj_t* bpmLabel = lv_label_create(item);
+  if (!isDirectory && metadata) {
+    auto bpmLabel = lv_spangroup_new_span(sg);
 
     char bpms[16];
     itoa(metadata->bpm, bpms, 10);
-    lv_label_set_text(bpmLabel, bpms);
-    lv_obj_set_align(bpmLabel, LV_DIR_RIGHT);
+    lv_span_set_text(bpmLabel, bpms);
 
-    // lv_style_set_text_color(
-    //     &bpmLabel->style, lv_palette_main(LV_PALETTE_LIGHT_GREEN));
+    lv_style_set_text_color(
+        &bpmLabel->style, lv_palette_main(LV_PALETTE_LIGHT_GREEN));
   }
 
-  lv_obj_set_width(item, LV_PCT(100));
+  lv_obj_set_width(sg, LV_PCT(100));
 }
 
 apc::audio::audio_format apc::ui::screens::browse_screen::get_audio_format(
@@ -200,6 +196,7 @@ apc::audio::audio_format apc::ui::screens::browse_screen::get_audio_format(
 }
 
 void apc::ui::screens::browse_screen::select_item(int index) {
+
   auto currentItem = lv_obj_get_child(ui_BrowseScreen_FilesPanel, index);
 
   Serial.printf("Selection: %d\n", index);

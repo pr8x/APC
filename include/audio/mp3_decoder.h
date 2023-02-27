@@ -1,6 +1,6 @@
 #pragma once
 #include <FS.h>
-#include <debugger.h>
+#include <debug.h>
 #include <minimp3.h>
 #include <stdint.h>
 #include <string.h>

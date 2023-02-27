@@ -1,7 +1,9 @@
 #include <application.h>
-#include <debugger.h>
+#include <debug.h>
 
 #include <memory>
+
+namespace {
 
 void setup_serial() {
   Serial.begin(9600);
@@ -26,6 +28,10 @@ void sync_with_RTC() {
   }
 }
 
+inline void init_debugger() { debug.begin(SerialUSB1); }
+
+}  // namespace
+
 std::unique_ptr<apc::application> app;
 
 void setup() {
@@ -36,8 +42,10 @@ void setup() {
   if (CrashReport) {
     Serial.print(CrashReport);
   }
+#endif
 
-  apc::init_debugger();
+#if APC_ENABLE_GDB_STUB
+  init_debugger();
 #endif
 
   app = std::make_unique<apc::application>();

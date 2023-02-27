@@ -2,8 +2,6 @@
 #include <ui/display_driver.h>
 #include <controls/mux.h>
 
-#define APC_DEBUG 1
-
 namespace apc {
 
 static constexpr uint32_t AudioMemoryBlocks = 10;
