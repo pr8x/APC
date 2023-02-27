@@ -33,6 +33,10 @@ void setup() {
   sync_with_RTC();
 
 #if APC_DEBUG
+  if (CrashReport) {
+    Serial.print(CrashReport);
+  }
+
   apc::init_debugger();
 #endif
 
