@@ -68,7 +68,7 @@ void ui_BrowseScreen_screen_init(void)
     lv_label_set_text(ui_BrowseScreen_USBLabel, "JetFlash USB 32GB\n\n");
     lv_obj_set_style_text_font(ui_BrowseScreen_USBLabel, &ui_font_Inter14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_BrowseScreen_FilesPanel = lv_obj_create(ui_BrowseScreen);
+    ui_BrowseScreen_FilesPanel = lv_list_create(ui_BrowseScreen);
     lv_obj_set_height(ui_BrowseScreen_FilesPanel, 180);
     lv_obj_set_width(ui_BrowseScreen_FilesPanel, lv_pct(100));
     lv_obj_set_align(ui_BrowseScreen_FilesPanel, LV_ALIGN_BOTTOM_LEFT);
