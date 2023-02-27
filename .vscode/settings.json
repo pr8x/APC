@@ -55,6 +55,8 @@
         "utility": "cpp",
         "typeinfo": "cpp",
         "pointers": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "util": "cpp",
+        "random": "cpp"
     }
 }
