@@ -1,7 +1,8 @@
 #pragma once
-#include <FS.h>
 #include <audio/metadata/id3_metadata_provider.h>
+#include <audio/metadata/metadata.h>
 
+#include <FS.h>
 #include <algorithm>
 #include <array>
 #include <iterator>

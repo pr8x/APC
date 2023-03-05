@@ -8,7 +8,7 @@ apc::application::application()
       _controls(ControlsMux1Config),
       _diagScreen(&_usb),
       _mixerScreen(&_audioGraph, &_display, &_browseScreen, &_controls),
-      _browseScreen(&_controls, &_usb) {
+      _browseScreen(&_controls, &_usb, &_trackDb) {
   _display.open_screen(&_mixerScreen);
 }
 

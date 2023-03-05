@@ -1,37 +1,48 @@
 #pragma once
-#include <audio/usb_audio_stream.h>
 #include <Audio.h>
 #include <FS.h>
+#include <audio/track.h>
+#include <audio/usb_audio_stream.h>
+#include <lvgl.h>
+#include <ui/waveform_canvas.h>
 
 namespace apc {
 namespace audio {
 
 class deck {
  public:
-  deck(usb_audio_stream* stream, AudioAmplifier* ampL, AudioAmplifier* ampR)
-      : _stream(stream), _ampL(ampL), _ampR(ampR) {}
+  deck(
+      usb_audio_stream* stream,
+      AudioAmplifier* ampL,
+      AudioAmplifier* ampR,
+      lv_obj_t* trackLabel,
+      lv_obj_t* artistLabel,
+      lv_obj_t* bpmLabel,
+      lv_obj_t* waveformContainer);
 
-  void play() {}
+  void play();
 
-  void stop() { _stream->stop(); }
+  void stop();
 
-  bool is_playing() { return _stream->state() == playback_state::playing; }
+  bool is_playing();
 
-  void load_track(File& track) {
-    _track = track;
-    _stream->play(_track);
-  }
+  void update();
 
-  void set_volume(float v) {
-    _ampL->gain(v);
-    _ampR->gain(v);
-  }
+  void load_track(const track* track);
+
+  void set_volume(float v);
 
  private:
-  File _track;
+  const track* _track;
   usb_audio_stream* _stream;
   AudioAmplifier* _ampL;
   AudioAmplifier* _ampR;
+
+  lv_obj_t* _trackLabel;
+  lv_obj_t* _artistLabel;
+  lv_obj_t* _bpmLabel;
+  tl::optional<audio::waveform> _waveform;
+  ui::waveform_canvas _waveformCanvas;
 };
 }  // namespace audio
 }  // namespace apc

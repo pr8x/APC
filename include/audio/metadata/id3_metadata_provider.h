@@ -1,25 +1,15 @@
 #pragma once
+#include <audio/metadata/metadata.h>
 #include <FS.h>
+#include <debug.h>
 #include <id3v2lib.h>
 
-#include <algorithm>
-#include <array>
-#include <iterator>
-#include <string>
-
-#include <debug.h>
+#include <codecvt>
+#include <locale>
 #include <tl/optional.hpp>
 
 namespace apc {
 namespace audio {
-
-struct metadata {
-  std::string artist;
-  std::string title;
-  std::string album;
-  float bpm = -1;
-  std::string key;
-};
 
 class id3_metadata_provider {
  public:
@@ -41,19 +31,19 @@ class id3_metadata_provider {
     ID3v2_TextFrame* artistFrame = APC_TRACE(ID3v2_Tag_get_artist_frame(tag));
 
     if (artistFrame != nullptr) {
-      meta.artist.assign(artistFrame->data->text, artistFrame->data->size);
+      meta.artist.assign(artistFrame->data->text, artistFrame->data->size - 4);
     }
 
     ID3v2_TextFrame* titleFrame = APC_TRACE(ID3v2_Tag_get_title_frame(tag));
 
     if (titleFrame != nullptr) {
-      meta.title.assign(titleFrame->data->text, titleFrame->data->size);
+      meta.title.assign(titleFrame->data->text, titleFrame->data->size - 4);
     }
 
     ID3v2_TextFrame* albumFrame = APC_TRACE(ID3v2_Tag_get_album_frame(tag));
 
     if (albumFrame != nullptr) {
-      meta.album.assign(albumFrame->data->text, albumFrame->data->size);
+      meta.album.assign(albumFrame->data->text, albumFrame->data->size - 4);
     }
 
     ID3v2_TextFrame* bpmFrame =
@@ -69,13 +59,14 @@ class id3_metadata_provider {
         APC_TRACE((ID3v2_TextFrame*)ID3v2_Tag_get_frame(tag, "TKEY"));
 
     if (keyFrame != nullptr) {
-      meta.key.assign(keyFrame->data->text, keyFrame->data->size);
+      meta.key.assign(keyFrame->data->text, keyFrame->data->size - 4);
     }
 
     ID3v2_Tag_free(tag);
 
     return meta;
   }
+
 };
 
 }  // namespace audio

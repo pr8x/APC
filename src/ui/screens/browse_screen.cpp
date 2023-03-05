@@ -1,8 +1,8 @@
 #include <ui/screens/browse_screen.h>
 
 apc::ui::screens::browse_screen::browse_screen(
-    controls* controls, usb_drive* usbDrive)
-    : screen(ui_BrowseScreen) {
+    controls* controls, usb_drive* usbDrive, audio::track_database* trackDb)
+    : screen(ui_BrowseScreen), _trackDb(trackDb) {
   _controls = controls;
   _usbDrive = usbDrive;
 
@@ -78,8 +78,13 @@ void apc::ui::screens::browse_screen::update() {
         Serial.printf("Selected file: %s\n", selectedFile.name());
 
         if (_browseCallback != nullptr) {
-          _browseCallback(selectedFile);
+          const auto track = _trackDb->find_track(selectedFile.name());
+
+          if (track) {
+            _browseCallback(*track);
+          }
         }
+
         close();
       }
     }
@@ -146,12 +151,14 @@ void apc::ui::screens::browse_screen::load_files(File& root) {
               metadata->bpm,
               metadata->key.c_str());
         }
+
+        audio::track track(entry, metadata);
+
+        _trackDb->add_track(entry.name(), std::move(track));
       }
     }
 
     add_entry_to_list(entry, isDirectory, metadata);
-
-    // lv_list_add_text(ui_BrowseScreen_FilesPanel, entry.name());
 
     _files.push_back(entry);
   }
@@ -161,23 +168,43 @@ void apc::ui::screens::browse_screen::load_files(File& root) {
 
 void apc::ui::screens::browse_screen::add_entry_to_list(
     File entry, bool isDirectory, tl::optional<audio::metadata> metadata) {
-  auto sg = lv_spangroup_create(ui_BrowseScreen_FilesPanel);
+  lv_obj_t* item = lv_obj_create(ui_BrowseScreen_FilesPanel);
+  lv_obj_set_flex_flow(item, LV_FLEX_FLOW_ROW);
+  lv_obj_set_height(item, 40);
 
-  auto nameLabel = lv_spangroup_new_span(sg);
-  lv_span_set_text(nameLabel, entry.name());
+  lv_obj_t* nameLabel = lv_label_create(item);
+  lv_label_set_text(nameLabel, entry.name());
+  lv_label_set_long_mode(nameLabel, LV_LABEL_LONG_SCROLL_CIRCULAR);
+  lv_obj_set_align(nameLabel, LV_ALIGN_TOP_LEFT);
+  lv_obj_set_flex_grow(nameLabel, 5);
 
   if (!isDirectory && metadata) {
-    auto bpmLabel = lv_spangroup_new_span(sg);
+    lv_obj_t* bpmLabel = lv_label_create(item);
 
     char bpms[16];
     itoa(metadata->bpm, bpms, 10);
-    lv_span_set_text(bpmLabel, bpms);
+    lv_label_set_text(bpmLabel, bpms);
+    lv_obj_set_align(bpmLabel, LV_ALIGN_RIGHT_MID);
+    lv_obj_set_flex_grow(bpmLabel, 1);
+    lv_obj_set_style_text_color(
+        bpmLabel,
+        lv_palette_main(LV_PALETTE_LIGHT_GREEN),
+        LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_style_set_text_color(
-        &bpmLabel->style, lv_palette_main(LV_PALETTE_LIGHT_GREEN));
+    lv_obj_t* keyLabel = lv_label_create(item);
+    lv_label_set_text(keyLabel, metadata->key.c_str());
+    lv_obj_set_align(keyLabel, LV_ALIGN_RIGHT_MID);
+    lv_obj_set_flex_grow(keyLabel, 1);
+    // lv_obj_set_style_text_color(
+    //     keyLabel,
+    //     lv_palette_main(LV_PALETTE_LIGHT_GREEN),
+    //     LV_PART_MAIN | LV_STATE_DEFAULT);
   }
 
-  lv_obj_set_width(sg, LV_PCT(100));
+  lv_obj_set_width(item, LV_PCT(100));
+  lv_obj_set_style_radius(item, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+  lv_obj_set_style_border_side(
+      item, LV_BORDER_SIDE_NONE, LV_PART_MAIN | LV_STATE_DEFAULT);
 }
 
 apc::audio::audio_format apc::ui::screens::browse_screen::get_audio_format(
@@ -196,7 +223,6 @@ apc::audio::audio_format apc::ui::screens::browse_screen::get_audio_format(
 }
 
 void apc::ui::screens::browse_screen::select_item(int index) {
-
   auto currentItem = lv_obj_get_child(ui_BrowseScreen_FilesPanel, index);
 
   Serial.printf("Selection: %d\n", index);
@@ -207,7 +233,7 @@ void apc::ui::screens::browse_screen::select_item(int index) {
 }
 
 void apc::ui::screens::browse_screen::set_browse_callback(
-    std::function<void(File)> callback) {
+    std::function<void(const audio::track&)> callback) {
   _browseCallback = std::move(callback);
 }
 

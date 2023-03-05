@@ -57,6 +57,7 @@
         "pointers": "cpp",
         "string": "cpp",
         "util": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "codecvt": "cpp"
     }
 }
