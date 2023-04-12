@@ -12,7 +12,7 @@ void apc::ui::waveform_canvas::update() {
 
   auto h = lv_obj_get_height(_canvas);
 
-  lv_coord_t x;
+  lv_coord_t x = 0;
 
   lv_draw_rect_dsc_t rectDesc;
   lv_draw_rect_dsc_init(&rectDesc);
