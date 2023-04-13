@@ -6,14 +6,14 @@
 
 #include <codecvt>
 #include <locale>
-#include <tl/optional.hpp>
+#include <optional>
 
 namespace apc {
 namespace audio {
 
 class id3_metadata_provider {
  public:
-  virtual tl::optional<metadata> read_metadata(File& file) {
+  virtual std::optional<metadata> read_metadata(File& file) {
     char buffer[1024] = {0};
 
     size_t bytesRead = APC_TRACE(file.readBytes(buffer, sizeof(buffer)));

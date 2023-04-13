@@ -58,6 +58,17 @@
         "string": "cpp",
         "util": "cpp",
         "random": "cpp",
-        "codecvt": "cpp"
+        "codecvt": "cpp",
+        "atomic": "cpp",
+        "bit": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp",
+        "map": "cpp",
+        "iterator": "cpp",
+        "memory_resource": "cpp",
+        "optional": "cpp",
+        "numbers": "cpp",
+        "semaphore": "cpp",
+        "stop_token": "cpp"
     }
 }

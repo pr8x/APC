@@ -1,5 +1,6 @@
 #include <audio/deck.h>
 #include <audio/waveform.h>
+#include <stdlib.h>
 
 apc::audio::deck::deck(
     usb_audio_stream* stream,

@@ -41,7 +41,7 @@ class deck {
   lv_obj_t* _trackLabel;
   lv_obj_t* _artistLabel;
   lv_obj_t* _bpmLabel;
-  tl::optional<audio::waveform> _waveform;
+  std::optional<audio::waveform> _waveform;
   ui::waveform_canvas _waveformCanvas;
 };
 }  // namespace audio

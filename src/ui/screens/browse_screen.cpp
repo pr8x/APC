@@ -124,7 +124,7 @@ void apc::ui::screens::browse_screen::load_files(File& root) {
   while ((entry = root.openNextFile())) {
     bool isDirectory = entry.isDirectory();
 
-    tl::optional<apc::audio::metadata> metadata;
+    std::optional<apc::audio::metadata> metadata;
 
     if (!isDirectory) {
       auto audioFormat = get_audio_format(entry);
@@ -167,7 +167,7 @@ void apc::ui::screens::browse_screen::load_files(File& root) {
 }
 
 void apc::ui::screens::browse_screen::add_entry_to_list(
-    File entry, bool isDirectory, tl::optional<audio::metadata> metadata) {
+    File entry, bool isDirectory, std::optional<audio::metadata> metadata) {
   lv_obj_t* item = lv_obj_create(ui_BrowseScreen_FilesPanel);
   lv_obj_set_flex_flow(item, LV_FLEX_FLOW_ROW);
   lv_obj_set_height(item, 40);

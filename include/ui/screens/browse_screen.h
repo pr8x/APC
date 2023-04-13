@@ -11,7 +11,7 @@
 #include <util.h>
 
 #include <functional>
-#include <tl/optional.hpp>
+#include <optional>
 #include <vector>
 
 namespace apc {
@@ -39,7 +39,7 @@ class browse_screen : public screen {
   void load_files(File& root);
 
   void add_entry_to_list(
-      File entry, bool isDirectory, tl::optional<audio::metadata> metadata);
+      File entry, bool isDirectory, std::optional<audio::metadata> metadata);
 
   audio::audio_format get_audio_format(File& file);
 

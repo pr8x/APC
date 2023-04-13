@@ -2,14 +2,14 @@
 #include <Fs.h>
 #include <audio/metadata/metadata.h>
 
-#include <tl/optional.hpp>
+#include <optional>
 
 namespace apc {
 namespace audio {
 
 class track {
  public:
-  track(File file, tl::optional<audio::metadata> metadata);
+  track(File file, std::optional<audio::metadata> metadata);
 
   const char* file_name() const;
 
@@ -19,7 +19,7 @@ class track {
 
  private:
   File _file;
-  tl::optional<audio::metadata> _metadata;
+  std::optional<audio::metadata> _metadata;
 };
 
 }  // namespace audio

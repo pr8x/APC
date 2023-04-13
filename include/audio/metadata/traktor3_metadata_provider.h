@@ -13,7 +13,7 @@ namespace audio {
 
 class traktor3_metadata_provider final : public id3_metadata_provider {
  public:
-  tl::optional<metadata> read_metadata(File& file) override {
+  std::optional<metadata> read_metadata(File& file) override {
     // https://hellricer.github.io/2021/05/05/decoding-traktor4-field.html
     // ID3v2_Frame* privFrame =
     //     ID3v2_Tag_get_frame(tag, "PRIV");

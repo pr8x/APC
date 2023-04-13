@@ -1,6 +1,6 @@
 #include <audio/track.h>
 
-apc::audio::track::track(File file, tl::optional<audio::metadata> metadata)
+apc::audio::track::track(File file, std::optional<audio::metadata> metadata)
     : _file(std::move(file)), _metadata(std::move(metadata)) {}
 
 File apc::audio::track::file() const { return _file; }
