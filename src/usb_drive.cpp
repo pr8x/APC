@@ -1,6 +1,6 @@
 #include <USBHost_t36.h>
-#include <usb_drive.h>
 #include <logger.h>
+#include <usb_drive.h>
 
 namespace {
 USBHost usbhost;
@@ -25,7 +25,9 @@ bool apc::usb_drive::is_connected() { return _driveConnected; }
 
 bool apc::usb_drive::is_busy() { return drive.isBusy(); }
 
-File apc::usb_drive::open_path(const char* path) { return partition.open(path); }
+File apc::usb_drive::open_path(const char* path) {
+  return partition.open(path);
+}
 
 void apc::usb_drive::update() {
   usbhost.Task();
@@ -37,7 +39,12 @@ void apc::usb_drive::update() {
 
     memcpy(_productNameNT, drive.msDriveInfo.inquiry.ProductID, 16);
 
-    APC_LOG_INFO("USB device connected: %s\n", product_name());
+    APC_LOG_INFO(
+        "USB device connected: %s (FAT%u %.2f GB)",
+        product_name(),
+        partition.mscfs.fatType(),
+        partition.totalSize() / 1024.0f / 1024.0f / 1024.0f);
+
   } else if (_driveConnected && !isDriveAvailable) {
     _driveConnected = false;
     APC_LOG_INFO("USB device disconnected");
