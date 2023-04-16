@@ -47,7 +47,7 @@ class id3_metadata_provider {
     }
 
     ID3v2_TextFrame* bpmFrame =
-        APC_TRACE((ID3v2_TextFrame*)ID3v2_Tag_get_frame(tag, "TBPM"));
+        APC_TRACE((ID3v2_TextFrame*)ID3v2_Tag_get_frame(tag, const_cast<char*>("TBPM")));
 
     if (bpmFrame != nullptr) {
       char b[5] = {0};
@@ -56,7 +56,7 @@ class id3_metadata_provider {
     }
 
     ID3v2_TextFrame* keyFrame =
-        APC_TRACE((ID3v2_TextFrame*)ID3v2_Tag_get_frame(tag, "TKEY"));
+        APC_TRACE((ID3v2_TextFrame*)ID3v2_Tag_get_frame(tag, const_cast<char*>("TKEY")));
 
     if (keyFrame != nullptr) {
       meta.key.assign(keyFrame->data->text, keyFrame->data->size - 4);
