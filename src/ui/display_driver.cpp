@@ -6,6 +6,7 @@
 #include <lvgl.h>
 #include <ui/display_driver.h>
 #include <ui/export/ui.h>
+#include <logger.h>
 
 #include <cassert>
 #include <vector>
@@ -13,24 +14,24 @@
 struct apc::ui::display_driver::impl {
   impl(const display_config& config)
       : tft(config.cs, config.dc, config.mosi, config.sclk, config.rst) {
-    Serial.println("Initializing graphics driver...");
+    APC_LOG_INFO("Initializing graphics driver...");
 
     tft.init(240, 320); 
     tft.setRotation(3);
     tft.setTextColor(ST77XX_WHITE);
     tft.invertDisplay(false);
 
-    Serial.println("Initializing LVGL glue...");
+    APC_LOG_INFO("Initializing LVGL glue...");
 
     LvGLStatus status = glue.begin(&tft, (TouchScreen*)nullptr);
 
     if (status != LVGL_OK) {
-      Serial.printf("LVGL Glue error: %d\r\n", (int)status);
+      APC_LOG_ERROR("LVGL Glue error: %d", (int)status);
     }
 
     screenStack.reserve(5);
 
-    Serial.println("Bootstrapping UI screens...");
+    APC_LOG_INFO("Bootstrapping UI screens...");
     ui_init();
   }
 
@@ -67,7 +68,7 @@ void apc::ui::display_driver::open_screen(screen* screen) {
     activeScreen->set_close_callback(nullptr);
   }
 
-  Serial.printf("Screen opened: %s -> %s\n",
+  APC_LOG_DEBUG("Screen opened: %s -> %s",
                 activeScreen != nullptr ? activeScreen->name() : "[NULL]",
                 screen->name());
 
@@ -79,7 +80,7 @@ void apc::ui::display_driver::open_screen(screen* screen) {
     assert(!_impl->screenStack.empty());
     auto nextScreen = _impl->screenStack.back();
 
-    Serial.printf("Screen closed: %s -> %s\n", screen->name(),
+    APC_LOG_DEBUG("Screen closed: %s -> %s", screen->name(),
                   nextScreen->name());
 
     lv_disp_load_scr(nextScreen->get_object());

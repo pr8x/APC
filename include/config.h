@@ -1,8 +1,11 @@
 #pragma once
 #include <ui/display_driver.h>
 #include <controls/mux.h>
+#include <log_severity.h>
 
 namespace apc {
+
+static constexpr log_severity LogSeverity = log_severity::trace;
 
 static constexpr uint32_t AudioMemoryBlocks = 10;
 

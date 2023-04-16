@@ -3,6 +3,7 @@
 #include <FS.h>
 #include <debug.h>
 #include <id3v2lib.h>
+#include <logger.h>
 
 #include <codecvt>
 #include <locale>
@@ -17,12 +18,12 @@ class id3_metadata_provider {
     char buffer[1024] = {0};
 
     size_t bytesRead = APC_TRACE(file.readBytes(buffer, sizeof(buffer)));
-    Serial.printf("Read %d bytes\n", bytesRead);
+    APC_LOG_DEBUG("Read %d bytes\n", bytesRead);
 
     ID3v2_Tag* tag = APC_TRACE(ID3v2_read_tag_from_buffer(buffer, bytesRead));
 
     if (tag == nullptr) {
-      Serial.println("No ID3 tag found");
+      APC_LOG_DEBUG("No ID3 tag found");
       return {};
     }
 

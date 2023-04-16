@@ -1,6 +1,7 @@
 #pragma once
 #include <audio/metadata/id3_metadata_provider.h>
 #include <audio/metadata/metadata.h>
+#include <logger.h>
 
 #include <FS.h>
 #include <algorithm>
@@ -49,13 +50,13 @@ class traktor3_metadata_provider final : public id3_metadata_provider {
 
     read_bytes(stream, frame.frameId);
     std::reverse(std::begin(frame.frameId), std::end(frame.frameId));
-    Serial.printf("TRAKTOR frame id: %.*s\n", 4, frame.frameId);
+    APC_LOG_DEBUG("TRAKTOR frame id: %.*s\n", 4, frame.frameId);
 
     frame.frameLength = read_bytes<uint32_t>(stream);
-    Serial.printf("TRAKTOR frame length: %u\n", frame.frameLength);
+    APC_LOG_DEBUG("TRAKTOR frame length: %u\n", frame.frameLength);
 
     frame.numChildFrames = read_bytes<uint32_t>(stream);
-    Serial.printf("TRAKTOR child frames: %u\n", frame.numChildFrames);
+    APC_LOG_DEBUG("TRAKTOR child frames: %u\n", frame.numChildFrames);
 
     return frame;
   }

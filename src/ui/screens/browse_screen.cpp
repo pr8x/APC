@@ -1,3 +1,4 @@
+#include <logger.h>
 #include <ui/screens/browse_screen.h>
 
 apc::ui::screens::browse_screen::browse_screen(
@@ -59,7 +60,7 @@ void apc::ui::screens::browse_screen::update() {
   if (_controls->browse_knob.button.is_down()) {
     //".."
     if (!isRoot && _lbSelection == 0) {
-      Serial.println("Navigating to parent directory");
+      APC_LOG_DEBUG("Navigating to parent directory");
 
       _currentPath.pop_back();
       load_files(_currentPath.back());
@@ -68,14 +69,14 @@ void apc::ui::screens::browse_screen::update() {
       auto& selectedFile = _files[_lbSelection - (isRoot ? 0 : 1)];
 
       if (selectedFile.isDirectory()) {
-        Serial.printf("Opening directory: %s\n", selectedFile.name());
+        APC_LOG_DEBUG("Opening directory: %s\n", selectedFile.name());
 
         _currentPath.push_back(selectedFile);
 
         load_files(selectedFile);
         update_path_label();
       } else {
-        Serial.printf("Selected file: %s\n", selectedFile.name());
+        APC_LOG_DEBUG("Selected file: %s\n", selectedFile.name());
 
         if (_browseCallback != nullptr) {
           const auto track = _trackDb->find_track(selectedFile.name());
@@ -130,21 +131,21 @@ void apc::ui::screens::browse_screen::load_files(File& root) {
       auto audioFormat = get_audio_format(entry);
       bool isSupported = audioFormat != audio::audio_format::unknown;
 
-      Serial.printf("File: %s (Supported: %d)\n", entry.name(), isSupported);
+      APC_LOG_DEBUG("File: %s (Supported: %d)", entry.name(), isSupported);
 
       if (!isSupported) {
         continue;
       }
 
       if (audioFormat == audio::audio_format::mp3) {
-        Serial.printf("Reading metadata...\n");
+        APC_LOG_DEBUG("Reading metadata...");
 
         metadata = metaProvider.read_metadata(entry);
 
         if (metadata) {
-          Serial.printf(
+          APC_LOG_DEBUG(
               "Metadata:\n  Artist: %s\n  Title: %s\n  Album: %s\n  BPM: %f\n  "
-              "Key: %s\n",
+              "Key: %s",
               metadata->artist.c_str(),
               metadata->title.c_str(),
               metadata->album.c_str(),
@@ -225,7 +226,7 @@ apc::audio::audio_format apc::ui::screens::browse_screen::get_audio_format(
 void apc::ui::screens::browse_screen::select_item(int index) {
   auto currentItem = lv_obj_get_child(ui_BrowseScreen_FilesPanel, index);
 
-  Serial.printf("Selection: %d\n", index);
+  Serial.printf("Selection: %d", index);
 
   lv_obj_add_style(currentItem, &_lbItemStyleSelected, 0);
 

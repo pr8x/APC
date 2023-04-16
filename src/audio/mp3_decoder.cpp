@@ -121,7 +121,7 @@ bool apc::audio::mp3_decoder::decode_frame() {
       _framesOffset += _frameInfo.frame_bytes;
 
       Serial.printf(
-          "Frame decoded: bytes: %d samples: %d channels: %d bitrate: %dkbps\n",
+          "Frame decoded: bytes: %d samples: %d channels: %d bitrate: %dkbps",
           _frameInfo.frame_bytes,
           samplesRead,
           _frameInfo.channels,

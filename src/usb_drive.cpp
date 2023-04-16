@@ -1,5 +1,6 @@
 #include <USBHost_t36.h>
 #include <usb_drive.h>
+#include <logger.h>
 
 namespace {
 USBHost usbhost;
@@ -12,7 +13,7 @@ USBFilesystem partition(usbhost);
 }  // namespace
 
 apc::usb_drive::usb_drive() {
-  Serial.println("Initializing usb host...");
+  APC_LOG_INFO("Initializing usb host...");
   usbhost.begin();
 }
 
@@ -36,9 +37,9 @@ void apc::usb_drive::update() {
 
     memcpy(_productNameNT, drive.msDriveInfo.inquiry.ProductID, 16);
 
-    Serial.printf("USB device connected: %s\n", product_name());
+    APC_LOG_INFO("USB device connected: %s\n", product_name());
   } else if (_driveConnected && !isDriveAvailable) {
     _driveConnected = false;
-    Serial.println("USB device disconnected");
+    APC_LOG_INFO("USB device disconnected");
   }
 }

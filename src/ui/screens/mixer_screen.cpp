@@ -1,4 +1,5 @@
 #include <ui/screens/mixer_screen.h>
+#include <logger.h>
 
 apc::ui::screens::mixer_screen::mixer_screen(
     audio::audio_graph* audioGraph,
@@ -58,6 +59,6 @@ void apc::ui::screens::mixer_screen::update() {
 const char* apc::ui::screens::mixer_screen::name() { return "mixer screen"; }
 
 void apc::ui::screens::mixer_screen::on_browse_selection(const audio::track& track) {
-  Serial.printf("Loading track on deck A: %s\n", track.file().name());
+  APC_LOG_DEBUG("Loading track on deck A: %s", track.file().name());
   _deckA.load_track(&track);
 }

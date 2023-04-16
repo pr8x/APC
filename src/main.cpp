@@ -1,6 +1,6 @@
 #include <application.h>
 #include <debug.h>
-
+#include <logger.h>
 #include <memory>
 
 namespace {
@@ -22,9 +22,9 @@ void sync_with_RTC() {
   setSyncProvider(get_teensy_time);
 
   if (timeStatus() != timeSet) {
-    Serial.println("Unable to sync with the RTC");
+    APC_LOG_ERROR("Unable to sync with the RTC");
   } else {
-    Serial.println("RTC has set the system time");
+    APC_LOG_INFO("RTC has set the system time");
   }
 }
 
@@ -38,15 +38,15 @@ void setup() {
   setup_serial();
   sync_with_RTC();
 
-#if APC_DEBUG
-  if (CrashReport) {
-    Serial.print(CrashReport);
-  }
-#endif
+// #if APC_DEBUG
+//   if (CrashReport) {
+//     Serial.print(CrashReport);
+//   }
+// #endif
 
-#if APC_ENABLE_GDB_STUB
-  init_debugger();
-#endif
+// #if APC_ENABLE_GDB_STUB
+//   init_debugger();
+// #endif
 
   app = std::make_unique<apc::application>();
 }

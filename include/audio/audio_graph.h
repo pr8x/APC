@@ -6,14 +6,15 @@
 #include <Wire.h>
 #include <audio/usb_audio_stream.h>
 #include <config.h>
+#include <logger.h>
 
 namespace apc {
 namespace audio {
 class audio_graph {
  public:
   audio_graph() {
-    Serial.println("Creating audio graph...");
-    Serial.printf("Audio memory blocks: %d\n", AudioMemoryBlocks);
+    APC_LOG_INFO("Creating audio graph...");
+    APC_LOG_DEBUG("Audio memory blocks: %d", AudioMemoryBlocks);
     AudioMemory(AudioMemoryBlocks);
   }
 
