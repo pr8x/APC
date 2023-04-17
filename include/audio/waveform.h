@@ -28,6 +28,8 @@ class waveform {
     while (f.available()) {
       auto bytesRead = APC_TRACE(f.readBytes(buffer.data(), buffer.size()));
 
+      Serial.printf("Read %d bytes from file.\n", bytesRead);
+
       size_t offset = 0;
 
       while (offset < bytesRead) {
@@ -38,15 +40,21 @@ class waveform {
             pcm,
             &info));
 
+        Serial.printf("Read %d samples, move %d bytes\n", samplesRead, info.frame_bytes);
+
         offset += info.frame_bytes;
 
         if (samplesRead == 0) {
           if (info.frame_bytes > 0) {
+            Serial.printf("Junk bytes skipped\n");
             continue;
           } else {
+            Serial.printf("Not enough data\n");
             break;
           }
         }
+
+        Serial.printf("Summing...\n");
 
         int16_t lsum = 0, rsum = 0;
 

@@ -9,9 +9,11 @@ namespace audio {
 
 class track {
  public:
-  track(File file, std::optional<audio::metadata> metadata);
+  track(File file, std::string path, std::optional<audio::metadata> metadata);
 
   const char* file_name() const;
+
+  const char* full_path() const;
 
   File file() const;
 
@@ -19,6 +21,7 @@ class track {
 
  private:
   File _file;
+  std::string _path;
   std::optional<audio::metadata> _metadata;
 };
 

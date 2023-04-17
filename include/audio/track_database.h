@@ -10,7 +10,7 @@ namespace audio {
 
 class track_database {
  public:
-  bool add_track(const std::string& path, audio::track track);
+  const audio::track* add_track(const std::string& path, audio::track track);
 
   const audio::track* find_track(const std::string& path);
 

@@ -5,6 +5,7 @@
 #include <audio/usb_audio_stream.h>
 #include <lvgl.h>
 #include <ui/waveform_canvas.h>
+#include <usb_drive.h>
 
 namespace apc {
 namespace audio {
@@ -12,9 +13,10 @@ namespace audio {
 class deck {
  public:
   deck(
-      usb_audio_stream* stream,
+      AudioStream* stream,
       AudioAmplifier* ampL,
       AudioAmplifier* ampR,
+      usb_drive* usb,
       lv_obj_t* trackLabel,
       lv_obj_t* artistLabel,
       lv_obj_t* bpmLabel,
@@ -34,7 +36,9 @@ class deck {
 
  private:
   const track* _track;
-  usb_audio_stream* _stream;
+
+  usb_drive* _usb;
+  AudioStream* _stream;
   AudioAmplifier* _ampL;
   AudioAmplifier* _ampR;
 

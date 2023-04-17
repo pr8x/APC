@@ -16,6 +16,8 @@ class usb_drive {
 
   bool is_busy();
 
+  FS* filesystem();
+
   File open_path(const char* path);
 
   void update();

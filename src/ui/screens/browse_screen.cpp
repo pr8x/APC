@@ -121,41 +121,52 @@ void apc::ui::screens::browse_screen::load_files(File& root) {
   while ((entry = root.openNextFile())) {
     bool isDirectory = entry.isDirectory();
 
-    std::optional<apc::audio::metadata> metadata;
+    const apc::audio::track* track = nullptr;
 
     if (!isDirectory) {
-      auto audioFormat = get_audio_format(entry);
-      bool isSupported = audioFormat != audio::audio_format::unknown;
+      std::string path = root.name();
+      path += "/";
+      path += entry.name();
 
-      APC_LOG_DEBUG("File: %s (Supported: %d)", entry.name(), isSupported);
+      APC_LOG_TRACE("%s", path.c_str());
 
-      if (!isSupported) {
-        continue;
-      }
+      track = _trackDb->find_track(path);
 
-      if (audioFormat == audio::audio_format::mp3) {
-        APC_LOG_DEBUG("Reading metadata...");
+      if (!track) {
+        auto audioFormat = get_audio_format(entry);
+        bool isSupported = audioFormat != audio::audio_format::unknown;
 
-        metadata = metaProvider.read_metadata(entry);
+        APC_LOG_DEBUG("File: %s (Supported: %d)", entry.name(), isSupported);
 
-        if (metadata) {
-          APC_LOG_DEBUG(
-              "Metadata:\n  Artist: %s\n  Title: %s\n  Album: %s\n  BPM: %f\n  "
-              "Key: %s",
-              metadata->artist.c_str(),
-              metadata->title.c_str(),
-              metadata->album.c_str(),
-              metadata->bpm,
-              metadata->key.c_str());
+        if (!isSupported) {
+          continue;
         }
 
-        audio::track track(entry, metadata);
+        if (audioFormat == audio::audio_format::mp3) {
+          APC_LOG_DEBUG("Reading metadata...");
 
-        _trackDb->add_track(entry.name(), std::move(track));
+          auto meta = metaProvider.read_metadata(entry);
+
+          if (meta) {
+            APC_LOG_DEBUG(
+                "Metadata:\n  Artist: %s\n  Title: %s\n  Album: %s\n  BPM: "
+                "%f\n  "
+                "Key: %s",
+                meta->artist.c_str(),
+                meta->title.c_str(),
+                meta->album.c_str(),
+                meta->bpm,
+                meta->key.c_str());
+          }
+
+          track = _trackDb->add_track(
+              entry.name(),
+              audio::track(entry, std::move(path), std::move(meta)));
+        }
       }
     }
 
-    add_entry_to_list(entry, isDirectory, metadata);
+    add_entry_to_list(entry, isDirectory, track ? track->metadata() : nullptr);
 
     _files.push_back(entry);
   }
@@ -164,7 +175,7 @@ void apc::ui::screens::browse_screen::load_files(File& root) {
 }
 
 void apc::ui::screens::browse_screen::add_entry_to_list(
-    File entry, bool isDirectory, std::optional<audio::metadata> metadata) {
+    File entry, bool isDirectory, const audio::metadata* metadata) {
   lv_obj_t* item = lv_obj_create(ui_BrowseScreen_FilesPanel);
   lv_obj_set_flex_flow(item, LV_FLEX_FLOW_ROW);
   lv_obj_set_height(item, 40);
