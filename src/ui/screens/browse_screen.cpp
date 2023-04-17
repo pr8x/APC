@@ -93,18 +93,14 @@ void apc::ui::screens::browse_screen::update() {
 }
 
 void apc::ui::screens::browse_screen::update_path_label() {
-  char path[1024] = {'\0'};
-  char* p = path;
+  std::string path;
 
   for (auto& f : _currentPath) {
-    auto fileName = f.name();
-    auto len = strlen(fileName);
-    memcpy(p, fileName, len);
-    p += len;
-    *(p) = '/';
+    path += f.name();
+    path += '/';
   }
 
-  lv_label_set_text(ui_BrowseScreen_PathLabel, path);
+  lv_label_set_text(ui_BrowseScreen_PathLabel, path.c_str());
 }
 
 void apc::ui::screens::browse_screen::load_files(File& root) {
@@ -226,7 +222,7 @@ apc::audio::audio_format apc::ui::screens::browse_screen::get_audio_format(
 void apc::ui::screens::browse_screen::select_item(int index) {
   auto currentItem = lv_obj_get_child(ui_BrowseScreen_FilesPanel, index);
 
-  Serial.printf("Selection: %d", index);
+  APC_LOG_DEBUG("Selection: %d", index);
 
   lv_obj_add_style(currentItem, &_lbItemStyleSelected, 0);
 
