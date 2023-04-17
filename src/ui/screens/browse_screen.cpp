@@ -69,14 +69,14 @@ void apc::ui::screens::browse_screen::update() {
       auto& selectedFile = _files[_lbSelection - (isRoot ? 0 : 1)];
 
       if (selectedFile.isDirectory()) {
-        APC_LOG_DEBUG("Opening directory: %s\n", selectedFile.name());
+        APC_LOG_DEBUG("Opening directory: %s", selectedFile.name());
 
         _currentPath.push_back(selectedFile);
 
         load_files(selectedFile);
         update_path_label();
       } else {
-        APC_LOG_DEBUG("Selected file: %s\n", selectedFile.name());
+        APC_LOG_DEBUG("Selected file: %s", selectedFile.name());
 
         if (_browseCallback != nullptr) {
           const auto track = _trackDb->find_track(selectedFile.name());
