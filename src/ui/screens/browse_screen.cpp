@@ -155,7 +155,7 @@ void apc::ui::screens::browse_screen::load_files(File& root) {
                 meta->artist.c_str(),
                 meta->title.c_str(),
                 meta->album.c_str(),
-                meta->bpm,
+                meta->bpm.value_or(0),
                 meta->key.c_str());
           }
 
@@ -190,8 +190,9 @@ void apc::ui::screens::browse_screen::add_entry_to_list(
     lv_obj_t* bpmLabel = lv_label_create(item);
 
     char bpms[16];
-    itoa(metadata->bpm, bpms, 10);
+    itoa(*metadata->bpm, bpms, 10);
     lv_label_set_text(bpmLabel, bpms);
+
     lv_obj_set_align(bpmLabel, LV_ALIGN_RIGHT_MID);
     lv_obj_set_flex_grow(bpmLabel, 1);
     lv_obj_set_style_text_color(

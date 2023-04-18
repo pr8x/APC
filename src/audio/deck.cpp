@@ -3,6 +3,7 @@
 #include <logger.h>
 #include <play_sd_mp3.h>
 #include <stdlib.h>
+#include <util.h>
 
 apc::audio::deck::deck(
     AudioPlaySdMp3* stream,
@@ -12,6 +13,9 @@ apc::audio::deck::deck(
     lv_obj_t* trackLabel,
     lv_obj_t* artistLabel,
     lv_obj_t* bpmLabel,
+    lv_obj_t* totalTimeLabel,
+    lv_obj_t* remainingTimeLabel,
+    lv_obj_t* keyLabel,
     lv_obj_t* waveformContainer)
     : _track(nullptr),
       _stream(stream),
@@ -21,6 +25,9 @@ apc::audio::deck::deck(
       _trackLabel(trackLabel),
       _artistLabel(artistLabel),
       _bpmLabel(bpmLabel),
+      _totalTimeLabel(totalTimeLabel),
+      _remainingTimeLabel(remainingTimeLabel),
+      _keyLabel(keyLabel),
       _waveformCanvas(waveformContainer) {}
 
 void apc::audio::deck::play() {
@@ -38,7 +45,16 @@ void apc::audio::deck::stop() { _stream->pause(true); }
 
 bool apc::audio::deck::is_playing() { return _stream->isPlaying(); }
 
-void apc::audio::deck::update() { _waveformCanvas.update(); }
+void apc::audio::deck::update() {
+  if (is_playing()) {
+    fixed_string_builder<24> sb;
+
+    sb.append_time(_stream->positionMillis());
+    lv_label_set_text(_remainingTimeLabel, sb.str());
+  }
+
+  //_waveformCanvas.update();
+}
 
 void apc::audio::deck::load_track(const track* track) {
   _track = track;
@@ -49,20 +65,39 @@ void apc::audio::deck::load_track(const track* track) {
 
   const auto meta = _track->metadata();
 
-  if (meta) {
-    lv_label_set_text(_trackLabel, meta->title.c_str());
+  if (meta && !meta->artist.empty()) {
     lv_label_set_text(_artistLabel, meta->artist.c_str());
-
-    char b[8];
-    itoa(meta->bpm, b, 10);
-    lv_label_set_text(_bpmLabel, b);
-
   } else {
-    lv_label_set_text(_trackLabel, track->file().name());
     lv_label_set_text(_artistLabel, "Unknown");
-    lv_label_set_text(_bpmLabel, "N/A");
   }
 
+  if (meta && !meta->title.empty()) {
+    lv_label_set_text(_trackLabel, meta->title.c_str());
+  } else {
+    lv_label_set_text(_trackLabel, track->file_name());
+  }
+
+  if (meta && !meta->key.empty()) {
+    lv_label_set_text(_keyLabel, meta->key.c_str());
+  } else {
+    lv_label_set_text(_keyLabel, "N/A");
+  }
+
+  if (meta && meta->bpm) {
+    char b[8];
+    itoa(*meta->bpm, b, 10);
+    lv_label_set_text(_bpmLabel, b);
+  } else {
+    lv_label_set_text(_keyLabel, "N/A");
+  }
+
+  if (meta && meta->lengthMillis) {
+    fixed_string_builder<24> sb;
+    sb.append_time(*meta->lengthMillis);
+    lv_label_set_text(_totalTimeLabel, sb.str());
+  } else {
+    lv_label_set_text(_totalTimeLabel, "N/A");
+  }
 }
 
 void apc::audio::deck::set_volume(float v) {

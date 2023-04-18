@@ -21,6 +21,9 @@ apc::ui::screens::mixer_screen::mixer_screen(
           ui_MixerScreen_DeckA_TrackLabel,
           ui_MixerScreen_DeckA_ArtistLabel,
           ui_MixerScreen_DeckA_BPMLabel,
+          ui_MixerScreen_DeckA_TotalTimeLabel,
+          ui_MixerScreen_DeckA_RemaiTimeLabel,
+          ui_MixerScreen_DeckA_KeyLabel,
           ui_MixerScreen_DeckA_Waveform),
       _deckB(
           &_audioGraph->Deck_B,
@@ -30,6 +33,9 @@ apc::ui::screens::mixer_screen::mixer_screen(
           ui_MixerScreen_DeckB_TrackLabel,
           ui_MixerScreen_DeckB_ArtistLabel,
           ui_MixerScreen_DeckB_BPMLabel,
+          ui_MixerScreen_DeckB_TotalTimeLabel,
+          ui_MixerScreen_DeckB_RemaiTimeLabel,
+          ui_MixerScreen_DeckB_KeyLabel,
           ui_MixerScreen_DeckB_Waveform) {
   _deckA.set_volume(1.0f);
   _deckB.set_volume(1.0f);
@@ -67,6 +73,9 @@ void apc::ui::screens::mixer_screen::load() {
 
 void apc::ui::screens::mixer_screen::update() {
   screen::update();
+
+  _deckA.update();
+  _deckB.update();
 
   if (_display->active_screen() != _browseScreen &&
       _controls->browse_knob.delta() != 0) {

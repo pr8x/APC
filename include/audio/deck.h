@@ -2,7 +2,6 @@
 #include <Audio.h>
 #include <FS.h>
 #include <audio/track.h>
-#include <audio/usb_audio_stream.h>
 #include <lvgl.h>
 #include <ui/waveform_canvas.h>
 #include <usb_drive.h>
@@ -21,6 +20,9 @@ class deck {
       lv_obj_t* trackLabel,
       lv_obj_t* artistLabel,
       lv_obj_t* bpmLabel,
+      lv_obj_t* totalTimeLabel,
+      lv_obj_t* remainingTimeLabel,
+      lv_obj_t* keyLabel,
       lv_obj_t* waveformContainer);
 
   void play();
@@ -46,6 +48,9 @@ class deck {
   lv_obj_t* _trackLabel;
   lv_obj_t* _artistLabel;
   lv_obj_t* _bpmLabel;
+  lv_obj_t* _totalTimeLabel;
+  lv_obj_t* _remainingTimeLabel;
+  lv_obj_t* _keyLabel;
   std::optional<audio::waveform> _waveform;
   ui::waveform_canvas _waveformCanvas;
 };

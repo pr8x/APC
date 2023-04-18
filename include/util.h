@@ -16,6 +16,18 @@ class fixed_string_builder {
     _offset += sprintf(_offset, format, args...);
   }
 
+  // TODO: Make <chrono> compile
+  void append_time(uint32_t milli) {
+    long hr = milli / 3600000;
+    milli = milli - 3600000 * hr;
+    long min = milli / 60000;
+    milli = milli - 60000 * min;
+    long sec = milli / 1000;
+    milli = milli - 1000 * sec;
+
+    append_format("%02ld:%02ld", min, sec);
+  }
+
   const char* str() const {
     *(_offset + 1) = '\0';
     return _buffer;
