@@ -34,10 +34,13 @@ apc::ui::screens::mixer_screen::mixer_screen(
   _deckA.set_volume(1.0f);
   _deckB.set_volume(1.0f);
 
-  set_headphones_volume(1.0f);
-  set_master_volume(1.0f);
+  constexpr double allpass[] = {1.0, 0.0, 0.0, 0.0, 0.0};
+  _audioGraph->Filter_AL.setCoefficients(0, allpass);
+  _audioGraph->Filter_AR.setCoefficients(0, allpass);
+  _audioGraph->Filter_BL.setCoefficients(0, allpass);
+  _audioGraph->Filter_BR.setCoefficients(0, allpass);
 
-    // TODO: Prevent clipping
+  // TODO: Prevent clipping
   _audioGraph->Mixer_Master_L.gain(DeckAMixerChannel, 0.5);
   _audioGraph->Mixer_Master_L.gain(DeckBMixerChannel, 0.5);
 
@@ -69,9 +72,6 @@ void apc::ui::screens::mixer_screen::update() {
       _controls->browse_knob.delta() != 0) {
     _display->open_screen(_browseScreen);
   }
-
-  // APC_LOG_DEBUG("%f", _controls->master_volume_pot.value());
-  //  set_master_volume(_controls->master_volume_pot.value());
 }
 
 const char* apc::ui::screens::mixer_screen::name() { return "mixer screen"; }

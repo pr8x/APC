@@ -21,6 +21,8 @@ void apc::application::update() {
     }
   }
 
+  _mixerScreen.set_master_volume(_controls.master_volume_pot.value());
+
   _usb.update();
   _display.update();
 }
