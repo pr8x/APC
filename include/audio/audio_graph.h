@@ -4,7 +4,6 @@
 #include <SPI.h>
 #include <SerialFlash.h>
 #include <Wire.h>
-#include <audio/usb_audio_stream.h>
 #include <config.h>
 #include <logger.h>
 #include <play_sd_mp3.h>
