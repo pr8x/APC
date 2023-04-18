@@ -6,6 +6,7 @@
 #include <lvgl.h>
 #include <ui/waveform_canvas.h>
 #include <usb_drive.h>
+#include <play_sd_mp3.h>
 
 namespace apc {
 namespace audio {
@@ -13,7 +14,7 @@ namespace audio {
 class deck {
  public:
   deck(
-      AudioStream* stream,
+      AudioPlaySdMp3* stream,
       AudioAmplifier* ampL,
       AudioAmplifier* ampR,
       usb_drive* usb,
@@ -38,7 +39,7 @@ class deck {
   const track* _track;
 
   usb_drive* _usb;
-  AudioStream* _stream;
+  AudioPlaySdMp3* _stream;
   AudioAmplifier* _ampL;
   AudioAmplifier* _ampR;
 

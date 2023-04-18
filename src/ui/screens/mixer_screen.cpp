@@ -1,5 +1,3 @@
-#include "mixer_screen.h"
-
 #include <logger.h>
 #include <ui/screens/mixer_screen.h>
 
@@ -33,14 +31,18 @@ apc::ui::screens::mixer_screen::mixer_screen(
           ui_MixerScreen_DeckB_ArtistLabel,
           ui_MixerScreen_DeckB_BPMLabel,
           ui_MixerScreen_DeckB_Waveform) {
-  // TODO: Prevent clipping
+  _deckA.set_volume(1.0f);
+  _deckB.set_volume(1.0f);
+
+  set_headphones_volume(1.0f);
+  set_master_volume(1.0f);
+
+    // TODO: Prevent clipping
   _audioGraph->Mixer_Master_L.gain(DeckAMixerChannel, 0.5);
   _audioGraph->Mixer_Master_L.gain(DeckBMixerChannel, 0.5);
 
   _audioGraph->Mixer_Master_R.gain(DeckAMixerChannel, 0.5);
   _audioGraph->Mixer_Master_R.gain(DeckBMixerChannel, 0.5);
-
-  set_headphones_volume(0.2f);
 }
 
 void apc::ui::screens::mixer_screen::set_master_volume(float vol) {
@@ -58,9 +60,6 @@ void apc::ui::screens::mixer_screen::load() {
 
   _browseScreen->set_browse_callback(
       [this](const audio::track& track) { on_browse_selection(track); });
-
-  _deckA.set_volume(1.0f);
-  _deckB.set_volume(1.0f);
 }
 
 void apc::ui::screens::mixer_screen::update() {
@@ -71,13 +70,15 @@ void apc::ui::screens::mixer_screen::update() {
     _display->open_screen(_browseScreen);
   }
 
-  set_master_volume(_controls->master_volume_pot.value());
+  // APC_LOG_DEBUG("%f", _controls->master_volume_pot.value());
+  //  set_master_volume(_controls->master_volume_pot.value());
 }
 
 const char* apc::ui::screens::mixer_screen::name() { return "mixer screen"; }
 
 void apc::ui::screens::mixer_screen::on_browse_selection(
     const audio::track& track) {
-  APC_LOG_DEBUG("Loading track on deck A: %s", track.file().name());
+  APC_LOG_DEBUG("Loading track on deck A: %s", track.file_name());
   _deckA.load_track(&track);
+  _deckA.play();
 }

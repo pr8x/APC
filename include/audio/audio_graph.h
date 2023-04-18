@@ -20,8 +20,8 @@ class audio_graph {
   }
 
   // GUItool: begin automatically generated code
-  AudioPlayMemory Deck_B;          // xy=582.0909652709961,521.090934753418
-  AudioPlayMemory Deck_A;          // xy=584.0909423828125,472.0909118652344
+  AudioPlaySdMp3 Deck_B;           // xy=535.0910263061523,534.0909652709961
+  AudioPlaySdMp3 Deck_A;           // xy=538.0909652709961,463.09087562561035
   AudioAmplifier Amp_AL;           // xy=835.0909423828125,420.0909118652344
   AudioAmplifier Amp_AR;           // xy=840.0909423828125,469.0909118652344
   AudioAmplifier Amp_BR;           // xy=843.0909423828125,583.0909118652344
@@ -39,13 +39,14 @@ class audio_graph {
   AudioAmplifier Amp_Headphone_R;  // xy=1720.090950012207,427.09086990356445
   AudioAmplifier Amp_Headphone_L;  // xy=1726.090705871582,347.09084033966064
   AudioOutputI2S DAC_Master;       // xy=1928.090705871582,606.090892791748
-  AudioOutputI2S2 DAC_Headphone;   // xy=1961.090461730957,398.09086990356445
+  // AudioOutputI2S2          DAC_Headphone;
+  // //xy=1961.0904541015625,397.0908451080322
 
  private:
-  AudioConnection patchCord1{Deck_B, Amp_BL};
-  AudioConnection patchCord2{Deck_B, Amp_BR};
-  AudioConnection patchCord3{Deck_A, Amp_AL};
-  AudioConnection patchCord4{Deck_A, Amp_AR};
+  AudioConnection patchCord1{Deck_B, 0, Amp_BL, 0};
+  AudioConnection patchCord2{Deck_B, 1, Amp_BR, 0};
+  AudioConnection patchCord3{Deck_A, 0, Amp_AL, 0};
+  AudioConnection patchCord4{Deck_A, 1, Amp_AR, 0};
   AudioConnection patchCord5{Amp_AL, Filter_AL};
   AudioConnection patchCord6{Amp_AR, Filter_AR};
   AudioConnection patchCord7{Amp_BR, Filter_BR};
@@ -64,8 +65,8 @@ class audio_graph {
   AudioConnection patchCord20{Mixer_Master_R, Amp_Master_R};
   AudioConnection patchCord21{Amp_Master_L, 0, DAC_Master, 0};
   AudioConnection patchCord22{Amp_Master_R, 0, DAC_Master, 1};
-  AudioConnection patchCord23{Amp_Headphone_R, 0, DAC_Headphone, 1};
-  AudioConnection patchCord24{Amp_Headphone_L, 0, DAC_Headphone, 0};
+  // AudioConnection          patchCord23{Amp_Headphone_R, 0, DAC_Headphone, 1};
+  // AudioConnection          patchCord24{Amp_Headphone_L, 0, DAC_Headphone, 0};
   // GUItool: end automatically generated code
 };
 }  // namespace audio
