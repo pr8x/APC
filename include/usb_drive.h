@@ -18,6 +18,10 @@ class usb_drive {
 
   FS* filesystem();
 
+  uint64_t partition_size();
+
+  const char* fat_type();
+
   File open_path(const char* path);
 
   void update();
