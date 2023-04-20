@@ -18,7 +18,7 @@ DIY DJ Controller using Teensy 4
 
 ## Audio graph
 
-
+![image](https://user-images.githubusercontent.com/4670166/233420917-e2d9170a-85c3-41b4-a970-76382f0f7341.png)
 
 
 ## How to build
