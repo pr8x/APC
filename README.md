@@ -1,0 +1,41 @@
+# AustinPowers
+DIY DJ Controller using Teensy 4
+
+
+## Hardware
+
+### Components
+
+- [Teensy 4](https://www.pjrc.com/store/teensy40.html)
+- 1x 2.8" TFT ST7735 display 
+- ?x RV09 Potentiometer
+- 1x KY-040 Rotary Encoder
+- 2x PCM5102A DAC
+- 2x CD74HC4067 16 Channel Multiplexer
+
+### PCB
+
+
+## Audio graph
+
+![image](https://user-images.githubusercontent.com/4670166/233420917-e2d9170a-85c3-41b4-a970-76382f0f7341.png)
+
+
+## How to build
+
+### Prerequisites
+- [PlatformIO](https://platformio.org/)
+- (Optional) VSCode
+- (Optional) clang-format/clang-tidy
+
+### Steps
+
+- `git clone` this project
+- Run `pio build` to build it. PlatformIO should install all the necessary toolchains.
+- (Non Windows): Adjust the serial ports in the platform.ini file (they default to COM6/COM7 for Windows)
+- Connect your Teensy via USB and run `pio upload` to upload it
+
+
+## License 
+
+MIT
