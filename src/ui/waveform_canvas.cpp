@@ -1,6 +1,7 @@
 #include <ui/waveform_canvas.h>
 
 #include <climits>
+#include <debug.h>
 
 apc::ui::waveform_canvas::waveform_canvas(lv_obj_t* container)
     : _container(container) {
@@ -45,8 +46,6 @@ void apc::ui::waveform_canvas::update() {
   lv_draw_rect_dsc_t rectDesc;
   lv_draw_rect_dsc_init(&rectDesc);
 
-  rectDesc.bg_color = lv_palette_main(LV_PALETTE_RED);
-
   lv_coord_t hh = h / 2;
 
   for (const auto& frame : _waveform->frames()) {
@@ -54,7 +53,10 @@ void apc::ui::waveform_canvas::update() {
     float max = ((((float)frame.max) - SHRT_MIN) / SHRT_MAX);
     float barHeight = (max - min) * hh;
 
-    lv_canvas_draw_rect(_canvas, x, hh - barHeight, BarWidth, barHeight, &rectDesc);
+    rectDesc.bg_color = LV_COLOR_MAKE(frame.r, frame.g, frame.b);
+
+    lv_canvas_draw_rect(
+        _canvas, x, hh - barHeight, BarWidth, barHeight, &rectDesc);
 
     lv_canvas_draw_rect(_canvas, x, hh, BarWidth, barHeight, &rectDesc);
 

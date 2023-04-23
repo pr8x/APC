@@ -13,7 +13,7 @@ class mp3_decoder {
  public:
   mp3_decoder(File file) {
     _decoder = APC_TRACE(MP3InitDecoder());
-    _file = file;
+    _file = std::move(file);
     _buffer.resize(MAINBUF_SIZE * 2);
     _samples.resize(2304);
   }
@@ -24,6 +24,8 @@ class mp3_decoder {
     MP3FrameInfo* info;
     gsl::span<short> samples;
   };
+
+  uint64_t offset() { return _file.position(); }
 
   bool decode_frame(frame& outFrame, decoding_error& outError) {
     if (_remainingBytes < MAINBUF_SIZE) {

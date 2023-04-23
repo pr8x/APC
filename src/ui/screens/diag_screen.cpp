@@ -28,7 +28,7 @@ void apc::ui::screens::diag_screen::update() {
   float internalTemp = InternalTemperature.readTemperatureC();
 
   int totalRamKb = 1024;  // 512K + 512K
-  int usedRamKb = ramAvailable() / 1024;
+  int usedRamKb = (int) ceil(ramAvailable() / 1024.0f);
 
   fixed_string_builder<2048> sb;
 

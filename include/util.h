@@ -1,5 +1,7 @@
 #pragma once
 #include <algorithm>
+#include <dspinst.h>
+#include <gsl/span>
 
 namespace apc {
 
