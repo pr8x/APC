@@ -8,10 +8,12 @@ apc::ui::waveform_canvas::waveform_canvas(lv_obj_t* container)
   auto containerHeight = 70;  // lv_obj_get_height(_container);
 
   _canvas = lv_canvas_create(_container);
+
+  lv_obj_move_background(_canvas);
   lv_obj_set_width(_canvas, lv_pct(100));
   lv_obj_set_height(_canvas, lv_pct(100));
 
-  APC_LOG_DEBUG(
+  APC_LOG_TRACE(
       "Allocating waveform canvas buffer (%dx%d)...",
       containerWidth,
       containerHeight);

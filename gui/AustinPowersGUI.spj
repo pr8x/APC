@@ -7762,7 +7762,7 @@
     "theme_color2": 0,
     "exportFolderPath": "C:\\Users\\luisv\\Desktop\\IoT\\AustinPowers\\src\\ui\\export",
     "projectExportFolderPath": "C:\\Users\\luisv\\Desktop\\IoT\\AustinPowers\\gui\\export_root",
-    "backup_cnt": 25,
+    "backup_cnt": 29,
     "autosave_cnt": 0,
     "lvgl_version": "8.3.3",
     "callfuncsexport": "C_FILE",

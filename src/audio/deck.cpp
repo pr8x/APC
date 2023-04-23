@@ -31,7 +31,7 @@ apc::audio::deck::deck(
       _keyLabel(keyLabel),
       _waveformCanvas(waveformContainer),
       _waveformLabel(waveformLabel) {
-  lv_obj_add_flag(_waveformLabel, LV_OBJ_FLAG_HIDDEN);
+  //lv_obj_add_flag(_waveformLabel, LV_OBJ_FLAG_HIDDEN);
 }
 
 void apc::audio::deck::play() {
@@ -104,16 +104,17 @@ void apc::audio::deck::load_track(const track* track) {
   }
 
   APC_LOG_DEBUG("Generating waveform...");
-  lv_obj_clear_flag(_waveformLabel, LV_OBJ_FLAG_HIDDEN);
+  //lv_obj_clear_flag(_waveformLabel, LV_OBJ_FLAG_HIDDEN);
 
   _waveform = waveform::generate(_track->file(), [this](float progress) {
     fixed_string_builder<24> sb;
     sb.append_format("Loading...%d%%", (int)(progress * 100));
 
     lv_label_set_text(_waveformLabel, sb.str());
+    lv_task_handler();
   });
 
-  lv_obj_add_flag(_waveformLabel, LV_OBJ_FLAG_HIDDEN);
+  //lv_obj_add_flag(_waveformLabel, LV_OBJ_FLAG_HIDDEN);
 
   APC_LOG_DEBUG(
       "Waveform generated with %d frames", _waveform->frames().size());

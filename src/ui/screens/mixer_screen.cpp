@@ -24,7 +24,8 @@ apc::ui::screens::mixer_screen::mixer_screen(
           ui_MixerScreen_DeckA_TotalTimeLabel,
           ui_MixerScreen_DeckA_RemaiTimeLabel,
           ui_MixerScreen_DeckA_KeyLabel,
-          ui_MixerScreen_DeckA_Waveform),
+          ui_MixerScreen_DeckA_Waveform,
+          ui_MixerScreen_DeckA_WaveformLabel),
       _deckB(
           &_audioGraph->Deck_B,
           &_audioGraph->Amp_BL,
@@ -36,7 +37,8 @@ apc::ui::screens::mixer_screen::mixer_screen(
           ui_MixerScreen_DeckB_TotalTimeLabel,
           ui_MixerScreen_DeckB_RemaiTimeLabel,
           ui_MixerScreen_DeckB_KeyLabel,
-          ui_MixerScreen_DeckB_Waveform) {
+          ui_MixerScreen_DeckB_Waveform,
+          ui_MixerScreen_DeckB_WaveformLabel) {
   _deckA.set_volume(1.0f);
   _deckB.set_volume(1.0f);
 

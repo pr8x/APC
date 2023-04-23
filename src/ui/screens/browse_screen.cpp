@@ -78,6 +78,9 @@ void apc::ui::screens::browse_screen::update() {
       } else {
         APC_LOG_DEBUG("Selected file: %s", selectedFile.name());
 
+        // TODO: Before callback?
+        close();
+
         if (_browseCallback != nullptr) {
           const auto track = _trackDb->find_track(selectedFile.name());
 
@@ -85,8 +88,6 @@ void apc::ui::screens::browse_screen::update() {
             _browseCallback(*track);
           }
         }
-
-        close();
       }
     }
   }
