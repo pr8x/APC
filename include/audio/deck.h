@@ -3,9 +3,9 @@
 #include <FS.h>
 #include <audio/track.h>
 #include <lvgl.h>
+#include <play_sd_mp3.h>
 #include <ui/waveform_canvas.h>
 #include <usb_drive.h>
-#include <play_sd_mp3.h>
 
 namespace apc {
 namespace audio {
@@ -23,7 +23,8 @@ class deck {
       lv_obj_t* totalTimeLabel,
       lv_obj_t* remainingTimeLabel,
       lv_obj_t* keyLabel,
-      lv_obj_t* waveformContainer);
+      lv_obj_t* waveformContainer,
+      lv_obj_t* waveformLabel);
 
   void play();
 
@@ -51,6 +52,8 @@ class deck {
   lv_obj_t* _totalTimeLabel;
   lv_obj_t* _remainingTimeLabel;
   lv_obj_t* _keyLabel;
+  lv_obj_t* _waveformLabel;
+
   std::optional<audio::waveform> _waveform;
   ui::waveform_canvas _waveformCanvas;
 };

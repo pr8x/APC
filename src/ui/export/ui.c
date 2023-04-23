@@ -29,6 +29,8 @@ lv_obj_t *ui_MixerScreen_DeckB_RemaiTimeLabel;
 lv_obj_t *ui_MixerScreen_DeckB_TotalTimeLabel;
 lv_obj_t *ui_MixerScreen_DeckB_BPMLabel;
 lv_obj_t *ui_MixerScreen_DeckB_KeyLabel;
+lv_obj_t *ui_MixerScreen_DeckA_WaveformLabel;
+lv_obj_t *ui_MixerScreen_DeckB_WaveformLabel;
 lv_obj_t *ui_DiagScreen;
 lv_obj_t *ui_DiagScreen_Label;
 lv_obj_t *ui____initial_actions0;
@@ -277,6 +279,37 @@ lv_obj_set_style_text_color(ui_MixerScreen_DeckB_KeyLabel, lv_color_hex(0xD002D2
 lv_obj_set_style_text_opa(ui_MixerScreen_DeckB_KeyLabel, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_text_align(ui_MixerScreen_DeckB_KeyLabel, LV_TEXT_ALIGN_RIGHT, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_text_font(ui_MixerScreen_DeckB_KeyLabel, &ui_font_Inter11, LV_PART_MAIN| LV_STATE_DEFAULT);
+
+ui_MixerScreen_DeckA_WaveformLabel = lv_label_create(ui_MixerScreen);
+lv_obj_set_width( ui_MixerScreen_DeckA_WaveformLabel, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_MixerScreen_DeckA_WaveformLabel, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_x( ui_MixerScreen_DeckA_WaveformLabel, 5 );
+lv_obj_set_y( ui_MixerScreen_DeckA_WaveformLabel, 55 );
+lv_label_set_long_mode(ui_MixerScreen_DeckA_WaveformLabel,LV_LABEL_LONG_CLIP);
+lv_label_set_text(ui_MixerScreen_DeckA_WaveformLabel,"Loading...66%");
+lv_obj_set_style_text_color(ui_MixerScreen_DeckA_WaveformLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_text_opa(ui_MixerScreen_DeckA_WaveformLabel, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_align(ui_MixerScreen_DeckA_WaveformLabel, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_font(ui_MixerScreen_DeckA_WaveformLabel, &ui_font_Inter11, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_bg_color(ui_MixerScreen_DeckA_WaveformLabel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_opa(ui_MixerScreen_DeckA_WaveformLabel, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_opa(ui_MixerScreen_DeckA_WaveformLabel, 128, LV_PART_MAIN| LV_STATE_DEFAULT);
+
+ui_MixerScreen_DeckB_WaveformLabel = lv_label_create(ui_MixerScreen);
+lv_obj_set_width( ui_MixerScreen_DeckB_WaveformLabel, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_MixerScreen_DeckB_WaveformLabel, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_x( ui_MixerScreen_DeckB_WaveformLabel, 5 );
+lv_obj_set_y( ui_MixerScreen_DeckB_WaveformLabel, -55 );
+lv_obj_set_align( ui_MixerScreen_DeckB_WaveformLabel, LV_ALIGN_BOTTOM_LEFT );
+lv_label_set_long_mode(ui_MixerScreen_DeckB_WaveformLabel,LV_LABEL_LONG_CLIP);
+lv_label_set_text(ui_MixerScreen_DeckB_WaveformLabel,"Loading...66%");
+lv_obj_set_style_text_color(ui_MixerScreen_DeckB_WaveformLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_text_opa(ui_MixerScreen_DeckB_WaveformLabel, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_align(ui_MixerScreen_DeckB_WaveformLabel, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_font(ui_MixerScreen_DeckB_WaveformLabel, &ui_font_Inter11, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_bg_color(ui_MixerScreen_DeckB_WaveformLabel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_opa(ui_MixerScreen_DeckB_WaveformLabel, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_opa(ui_MixerScreen_DeckB_WaveformLabel, 128, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 }
 void ui_DiagScreen_screen_init(void)

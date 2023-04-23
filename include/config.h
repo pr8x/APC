@@ -5,7 +5,8 @@
 
 namespace apc {
 
-static constexpr log_severity LogSeverity = log_severity::trace;
+//TODO: Put into apc.config.json
+static constexpr log_severity LogSeverity = log_severity::debug;
 
 static constexpr uint32_t AudioMemoryBlocks = 10;
 

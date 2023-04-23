@@ -45,6 +45,8 @@ extern lv_obj_t *ui_MixerScreen_DeckB_RemaiTimeLabel;
 extern lv_obj_t *ui_MixerScreen_DeckB_TotalTimeLabel;
 extern lv_obj_t *ui_MixerScreen_DeckB_BPMLabel;
 extern lv_obj_t *ui_MixerScreen_DeckB_KeyLabel;
+extern lv_obj_t *ui_MixerScreen_DeckA_WaveformLabel;
+extern lv_obj_t *ui_MixerScreen_DeckB_WaveformLabel;
 extern lv_obj_t *ui_DiagScreen;
 extern lv_obj_t *ui_DiagScreen_Label;
 extern lv_obj_t *ui____initial_actions0;
