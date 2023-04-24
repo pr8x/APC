@@ -2,6 +2,7 @@
 #include <Audio.h>
 #include <FS.h>
 #include <audio/track.h>
+#include <filter_biquad.h>
 #include <lvgl.h>
 #include <play_sd_mp3.h>
 #include <ui/waveform_canvas.h>
@@ -16,6 +17,8 @@ class deck {
       AudioPlaySdMp3* stream,
       AudioAmplifier* ampL,
       AudioAmplifier* ampR,
+      AudioFilterBiquad* filterL,
+      AudioFilterBiquad* filterR,
       usb_drive* usb,
       lv_obj_t* trackLabel,
       lv_obj_t* artistLabel,
@@ -26,17 +29,38 @@ class deck {
       lv_obj_t* waveformContainer,
       lv_obj_t* waveformLabel);
 
+  /// @brief 
   void play();
 
+  /// @brief 
   void stop();
 
+  /// @brief 
+  /// @return 
   bool is_playing();
 
+  /// @brief 
   void update();
 
+  /// @brief 
+  /// @param track 
   void load_track(const track* track);
 
+  /// @brief
+  /// @param v
   void set_volume(float v);
+
+  /// @brief 
+  /// @param v 
+  void set_filter_lowpass(float v);
+
+  /// @brief 
+  /// @param v 
+  void set_filter_highpass(float v);
+
+  /// @brief 
+  /// @param v 
+  void set_filter_bandpass(float v);
 
  private:
   const track* _track;
@@ -45,8 +69,10 @@ class deck {
   AudioPlaySdMp3* _stream;
   AudioAmplifier* _ampL;
   AudioAmplifier* _ampR;
+  AudioFilterBiquad* _filterL;
+  AudioFilterBiquad* _filterR;
 
-  lv_obj_t* _trackLabel;
+  lv_obj_t *_trackLabel;
   lv_obj_t* _artistLabel;
   lv_obj_t* _bpmLabel;
   lv_obj_t* _totalTimeLabel;

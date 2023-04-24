@@ -1,5 +1,6 @@
 #include <logger.h>
 #include <ui/screens/mixer_screen.h>
+#include <util.h>
 
 apc::ui::screens::mixer_screen::mixer_screen(
     audio::audio_graph* audioGraph,
@@ -17,6 +18,8 @@ apc::ui::screens::mixer_screen::mixer_screen(
           &_audioGraph->Deck_A,
           &_audioGraph->Amp_AL,
           &_audioGraph->Amp_AR,
+          &_audioGraph->Filter_AL,
+          &_audioGraph->Filter_AR,
           _usb,
           ui_MixerScreen_DeckA_TrackLabel,
           ui_MixerScreen_DeckA_ArtistLabel,
@@ -30,6 +33,8 @@ apc::ui::screens::mixer_screen::mixer_screen(
           &_audioGraph->Deck_B,
           &_audioGraph->Amp_BL,
           &_audioGraph->Amp_BR,
+          &_audioGraph->Filter_BL,
+          &_audioGraph->Filter_BR,
           _usb,
           ui_MixerScreen_DeckB_TrackLabel,
           ui_MixerScreen_DeckB_ArtistLabel,
@@ -41,12 +46,6 @@ apc::ui::screens::mixer_screen::mixer_screen(
           ui_MixerScreen_DeckB_WaveformLabel) {
   _deckA.set_volume(1.0f);
   _deckB.set_volume(1.0f);
-
-  constexpr double allpass[] = {1.0, 0.0, 0.0, 0.0, 0.0};
-  _audioGraph->Filter_AL.setCoefficients(0, allpass);
-  _audioGraph->Filter_AR.setCoefficients(0, allpass);
-  _audioGraph->Filter_BL.setCoefficients(0, allpass);
-  _audioGraph->Filter_BR.setCoefficients(0, allpass);
 
   // TODO: Prevent clipping
   _audioGraph->Mixer_Master_L.gain(DeckAMixerChannel, 0.5);
@@ -83,13 +82,22 @@ void apc::ui::screens::mixer_screen::update() {
       _controls->browse_knob.delta() != 0) {
     _display->open_screen(_browseScreen);
   }
+
+  _deckA.set_filter_lowpass(util::map<float>(
+      _controls->deck_a_effect_lowpass_pot.value(), 0, 1, -1, 1));
 }
 
 const char* apc::ui::screens::mixer_screen::name() { return "mixer screen"; }
 
 void apc::ui::screens::mixer_screen::on_browse_selection(
     const audio::track& track) {
-  APC_LOG_DEBUG("Loading track on deck A: %s", track.file_name());
-  _deckA.load_track(&track);
-  _deckA.play();
+  if (!_deckA.is_playing()) {
+    APC_LOG_DEBUG("Loading track on deck A: %s", track.file_name());
+    _deckA.load_track(&track);
+    _deckA.play();
+  } else if (!_deckB.is_playing()) {
+    APC_LOG_DEBUG("Loading track on deck B: %s", track.file_name());
+    _deckB.load_track(&track);
+    _deckB.play();
+  }
 }

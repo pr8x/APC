@@ -1,3 +1,5 @@
+#include "deck.h"
+
 #include <audio/deck.h>
 #include <audio/waveform.h>
 #include <logger.h>
@@ -9,6 +11,8 @@ apc::audio::deck::deck(
     AudioPlaySdMp3* stream,
     AudioAmplifier* ampL,
     AudioAmplifier* ampR,
+    AudioFilterBiquad* filterL,
+    AudioFilterBiquad* filterR,
     usb_drive* usb,
     lv_obj_t* trackLabel,
     lv_obj_t* artistLabel,
@@ -23,6 +27,8 @@ apc::audio::deck::deck(
       _usb(usb),
       _ampL(ampL),
       _ampR(ampR),
+      _filterL(filterL),
+      _filterR(filterR),
       _trackLabel(trackLabel),
       _artistLabel(artistLabel),
       _bpmLabel(bpmLabel),
@@ -32,6 +38,11 @@ apc::audio::deck::deck(
       _waveformCanvas(waveformContainer),
       _waveformLabel(waveformLabel) {
   lv_obj_add_flag(_waveformLabel, LV_OBJ_FLAG_HIDDEN);
+
+  static constexpr double allpass[] = {1.0, 0.0, 0.0, 0.0, 0.0};
+
+  _filterL->setCoefficients(0, allpass);
+  _filterR->setCoefficients(0, allpass);
 }
 
 void apc::audio::deck::play() {
@@ -106,29 +117,49 @@ void apc::audio::deck::load_track(const track* track) {
     lv_label_set_text(_totalTimeLabel, "N/A");
   }
 
-  APC_LOG_DEBUG("Generating waveform...");
-  lv_obj_clear_flag(_waveformLabel, LV_OBJ_FLAG_HIDDEN);
+  // APC_LOG_DEBUG("Generating waveform...");
+  // lv_obj_clear_flag(_waveformLabel, LV_OBJ_FLAG_HIDDEN);
 
-  _waveform = waveform::generate(
-      _track->file(),
-      [this](float progress) {
-        fixed_string_builder<24> sb;
-        sb.append_format("Loading...%d%%", (int)(progress * 100));
+  // _waveform = waveform::generate(
+  //     _track->file(),
+  //     [this](float progress) {
+  //       fixed_string_builder<24> sb;
+  //       sb.append_format("Loading...%d%%", (int)(progress * 100));
 
-        lv_label_set_text(_waveformLabel, sb.str());
-        lv_task_handler();
-      },
-      waveform_type::rms);
+  //       lv_label_set_text(_waveformLabel, sb.str());
+  //       lv_task_handler();
+  //     },
+  //     waveform_type::rms);
 
-  lv_obj_add_flag(_waveformLabel, LV_OBJ_FLAG_HIDDEN);
+  // lv_obj_add_flag(_waveformLabel, LV_OBJ_FLAG_HIDDEN);
 
-  APC_LOG_DEBUG(
-      "Waveform generated with %d frames", _waveform->frames().size());
+  // APC_LOG_DEBUG(
+  //     "Waveform generated with %d frames", _waveform->frames().size());
 
-  _waveformCanvas.set_waveform(&*_waveform);
+  // _waveformCanvas.set_waveform(&*_waveform);
 }
 
 void apc::audio::deck::set_volume(float v) {
   _ampL->gain(v);
   _ampR->gain(v);
 }
+
+// https:www.sandburgmusic.org/uploads/4/6/7/1/46719067/editor/audiospectrum_1.gif
+
+void apc::audio::deck::set_filter_lowpass(float v) {
+  constexpr uint32_t LowFreqTreshold = 300;
+  constexpr uint32_t MaxGain = 40;
+
+  _filterL->setLowShelf(0, LowFreqTreshold, v * MaxGain);
+  _filterR->setLowShelf(0, LowFreqTreshold, v * MaxGain);
+}
+
+void apc::audio::deck::set_filter_highpass(float v) {
+  constexpr uint32_t HighFreqTreshold = 5000;
+  constexpr uint32_t MaxGain = 40;
+
+  _filterL->setHighShelf(1, HighFreqTreshold, v * MaxGain);
+  _filterR->setHighShelf(1, HighFreqTreshold, v * MaxGain);
+}
+
+void apc::audio::deck::set_filter_bandpass(float v) {}

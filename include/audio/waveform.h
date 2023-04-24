@@ -5,7 +5,7 @@
 #include <tl/function_ref.hpp>
 #include <vector>
 
-#define APC_WAVEFORM_FFT_SUPPORT 1
+#define APC_WAVEFORM_FFT_SUPPORT 0
 
 namespace apc {
 namespace audio {

@@ -27,6 +27,8 @@ class controls {
 
   potentiometer master_volume_pot{mux1_pin(15)};
 
+  potentiometer deck_a_effect_lowpass_pot{mux1_pin(14)};
+
   rotary_switch browse_knob{mux1_pin(1), mux1_pin(2), mux1_pin(0)};
 };
 
