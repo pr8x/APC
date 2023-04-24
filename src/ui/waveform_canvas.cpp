@@ -1,7 +1,10 @@
+#include <debug.h>
 #include <ui/waveform_canvas.h>
 
 #include <climits>
-#include <debug.h>
+#include <util.h>
+
+#undef abs
 
 apc::ui::waveform_canvas::waveform_canvas(lv_obj_t* container)
     : _container(container) {
@@ -30,6 +33,8 @@ apc::ui::waveform_canvas::waveform_canvas(lv_obj_t* container)
       LV_IMG_CF_TRUE_COLOR);
 }
 
+void apc::ui::waveform_canvas::set_offset(uint64_t millis) { _offset = millis; }
+
 void apc::ui::waveform_canvas::update() {
   if (!_waveform) {
     return;
@@ -48,12 +53,18 @@ void apc::ui::waveform_canvas::update() {
 
   lv_coord_t hh = h / 2;
 
-  for (const auto& frame : _waveform->frames()) {
-    float min = ((((float)frame.min) - SHRT_MIN) / SHRT_MAX);
-    float max = ((((float)frame.max) - SHRT_MIN) / SHRT_MAX);
-    float barHeight = (max - min) * hh;
+  lv_canvas_fill_bg(_canvas, lv_color_black(), 0x0);
+
+  auto frames = _waveform->frames();
+  uint64_t frameOffset = _offset / _waveform->frame_length();
+
+  for (auto i = frameOffset; i < frames.size(); i++) {
+    const auto& frame = frames[i];
+    float barHeight = util::map<int16_t>(frame.v, SHRT_MIN, SHRT_MAX, 0, hh);
 
     rectDesc.bg_color = LV_COLOR_MAKE(frame.r, frame.g, frame.b);
+
+    // APC_LOG_DEBUG("COLOR: %d %d %d", frame.r, frame.g, frame.b);
 
     lv_canvas_draw_rect(
         _canvas, x, hh - barHeight, BarWidth, barHeight, &rectDesc);

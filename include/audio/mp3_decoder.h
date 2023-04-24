@@ -17,6 +17,8 @@ class mp3_decoder {
     _buffer.resize(MAINBUF_SIZE * 2);
     _samples.resize(2304);
   }
+  
+  ~mp3_decoder() { MP3FreeDecoder(_decoder); }
 
   using decoding_error = decltype(ERR_MP3_NONE);
 

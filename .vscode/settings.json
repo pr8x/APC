@@ -72,6 +72,8 @@
         "stop_token": "cpp",
         "unordered_set": "cpp",
         "set": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "byte": "cpp",
+        "narrow": "cpp"
     }
 }

@@ -49,7 +49,7 @@ void apc::ui::screens::browse_screen::update() {
       lv_obj_remove_style(oldItem, &_lbItemStyleSelected, 0);
     }
 
-    auto index = clamp<uint32_t>(
+    auto index = util::clamp<uint32_t>(
         _lbSelection + bkd,
         0,
         lv_obj_get_child_cnt(ui_BrowseScreen_FilesPanel) - 1);
@@ -188,23 +188,26 @@ void apc::ui::screens::browse_screen::add_entry_to_list(
   lv_obj_set_flex_grow(nameLabel, 5);
 
   if (!isDirectory && metadata) {
-    lv_obj_t* bpmLabel = lv_label_create(item);
+    if (metadata->bpm) {
+      lv_obj_t* bpmLabel = lv_label_create(item);
+      char bpms[16];
+      itoa(*metadata->bpm, bpms, 10);
+      lv_label_set_text(bpmLabel, bpms);
+      lv_obj_set_align(bpmLabel, LV_ALIGN_RIGHT_MID);
+      lv_obj_set_flex_grow(bpmLabel, 1);
+      lv_obj_set_style_text_color(
+          bpmLabel,
+          lv_palette_main(LV_PALETTE_LIGHT_GREEN),
+          LV_PART_MAIN | LV_STATE_DEFAULT);
+    }
 
-    char bpms[16];
-    itoa(*metadata->bpm, bpms, 10);
-    lv_label_set_text(bpmLabel, bpms);
+    if (!metadata->key.empty()) {
+      lv_obj_t* keyLabel = lv_label_create(item);
+      lv_label_set_text(keyLabel, metadata->key.c_str());
+      lv_obj_set_align(keyLabel, LV_ALIGN_RIGHT_MID);
+      lv_obj_set_flex_grow(keyLabel, 1);
+    }
 
-    lv_obj_set_align(bpmLabel, LV_ALIGN_RIGHT_MID);
-    lv_obj_set_flex_grow(bpmLabel, 1);
-    lv_obj_set_style_text_color(
-        bpmLabel,
-        lv_palette_main(LV_PALETTE_LIGHT_GREEN),
-        LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    lv_obj_t* keyLabel = lv_label_create(item);
-    lv_label_set_text(keyLabel, metadata->key.c_str());
-    lv_obj_set_align(keyLabel, LV_ALIGN_RIGHT_MID);
-    lv_obj_set_flex_grow(keyLabel, 1);
     // lv_obj_set_style_text_color(
     //     keyLabel,
     //     lv_palette_main(LV_PALETTE_LIGHT_GREEN),

@@ -1,14 +1,24 @@
 #pragma once
-#include <algorithm>
 #include <dspinst.h>
+
+#include <algorithm>
 #include <gsl/span>
 
 namespace apc {
+
+namespace util {
 
 template <class T>
 T clamp(T v, T min, T max) {
   return std::max(min, std::min(v, max));
 }
+
+template <class T>
+T map(T in, T inMin, T inMax, T outMin, T outMax) {
+  return (in - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+}
+
+}  // namespace util
 
 template <size_t Size>
 class fixed_string_builder {

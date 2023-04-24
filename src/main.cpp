@@ -44,9 +44,9 @@ void setup() {
 //   }
 // #endif
 
-// #if APC_ENABLE_GDB_STUB
-//   init_debugger();
-// #endif
+#if APC_ENABLE_GDB_STUB
+  init_debugger();
+#endif
 
   app = std::make_unique<apc::application>();
 }

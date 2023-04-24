@@ -51,13 +51,16 @@ bool apc::audio::deck::is_playing() { return _stream->isPlaying(); }
 
 void apc::audio::deck::update() {
   if (is_playing()) {
+    auto currentPos = _stream->positionMillis();
+
     fixed_string_builder<24> sb;
 
-    sb.append_time(_stream->positionMillis());
+    sb.append_time(currentPos);
     lv_label_set_text(_remainingTimeLabel, sb.str());
-  }
 
-  _waveformCanvas.update();
+    _waveformCanvas.set_offset(currentPos);
+    _waveformCanvas.update();
+  }
 }
 
 void apc::audio::deck::load_track(const track* track) {
@@ -106,13 +109,16 @@ void apc::audio::deck::load_track(const track* track) {
   APC_LOG_DEBUG("Generating waveform...");
   lv_obj_clear_flag(_waveformLabel, LV_OBJ_FLAG_HIDDEN);
 
-  _waveform = waveform::generate(_track->file(), [this](float progress) {
-    fixed_string_builder<24> sb;
-    sb.append_format("Loading...%d%%", (int)(progress * 100));
+  _waveform = waveform::generate(
+      _track->file(),
+      [this](float progress) {
+        fixed_string_builder<24> sb;
+        sb.append_format("Loading...%d%%", (int)(progress * 100));
 
-    lv_label_set_text(_waveformLabel, sb.str());
-    lv_task_handler();
-  });
+        lv_label_set_text(_waveformLabel, sb.str());
+        lv_task_handler();
+      },
+      waveform_type::rms);
 
   lv_obj_add_flag(_waveformLabel, LV_OBJ_FLAG_HIDDEN);
 
