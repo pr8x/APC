@@ -18,8 +18,21 @@ apc::ui::screens::mixer_screen::mixer_screen(
           &_audioGraph->Deck_A,
           &_audioGraph->Amp_AL,
           &_audioGraph->Amp_AR,
-          &_audioGraph->Filter_AL,
-          &_audioGraph->Filter_AR,
+          audio::equalizer(
+              {audio::equalizer::filter_bank{
+                   &_audioGraph->Filter_AL_Low,
+                   &_audioGraph->Amp_AL_Low,
+                   &_audioGraph->Filter_AL_Mid,
+                   &_audioGraph->Amp_AL_Mid,
+                   &_audioGraph->Filter_AL_High,
+                   &_audioGraph->Amp_AL_High},
+               audio::equalizer::filter_bank{
+                   &_audioGraph->Filter_AR_Low,
+                   &_audioGraph->Amp_AR_Low,
+                   &_audioGraph->Filter_AR_Mid,
+                   &_audioGraph->Amp_AR_Mid,
+                   &_audioGraph->Filter_AR_High,
+                   &_audioGraph->Amp_AR_High}}),
           _usb,
           ui_MixerScreen_DeckA_TrackLabel,
           ui_MixerScreen_DeckA_ArtistLabel,
@@ -33,8 +46,21 @@ apc::ui::screens::mixer_screen::mixer_screen(
           &_audioGraph->Deck_B,
           &_audioGraph->Amp_BL,
           &_audioGraph->Amp_BR,
-          &_audioGraph->Filter_BL,
-          &_audioGraph->Filter_BR,
+          audio::equalizer(
+              {audio::equalizer::filter_bank{
+                   &_audioGraph->Filter_BL_Low,
+                   &_audioGraph->Amp_BL_Low,
+                   &_audioGraph->Filter_BL_Mid,
+                   &_audioGraph->Amp_BL_Mid,
+                   &_audioGraph->Filter_BL_High,
+                   &_audioGraph->Amp_BL_High},
+               audio::equalizer::filter_bank{
+                   &_audioGraph->Filter_BR_Low,
+                   &_audioGraph->Amp_BR_Low,
+                   &_audioGraph->Filter_BR_Mid,
+                   &_audioGraph->Amp_BR_Mid,
+                   &_audioGraph->Filter_BR_High,
+                   &_audioGraph->Amp_BR_High}}),
           _usb,
           ui_MixerScreen_DeckB_TrackLabel,
           ui_MixerScreen_DeckB_ArtistLabel,
@@ -82,9 +108,6 @@ void apc::ui::screens::mixer_screen::update() {
       _controls->browse_knob.delta() != 0) {
     _display->open_screen(_browseScreen);
   }
-
-  _deckA.set_filter_lowpass(util::map<float>(
-      _controls->deck_a_effect_lowpass_pot.value(), 0, 1, -1, 1));
 }
 
 const char* apc::ui::screens::mixer_screen::name() { return "mixer screen"; }
@@ -100,4 +123,9 @@ void apc::ui::screens::mixer_screen::on_browse_selection(
     _deckB.load_track(&track);
     _deckB.play();
   }
+}
+
+void apc::ui::screens::mixer_screen::update_deck_eq() {
+  _deckA.eq().setBass(_controls->deck_a_filter_low_pot.value(-1, 1));
+  _deckA.eq().setTreble(_controls->deck_a_filter_high_pot.value(-1, 1));
 }

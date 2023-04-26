@@ -1,5 +1,6 @@
 #pragma once
 #include <audio/audio_graph.h>
+#include <audio/equalizer.h>
 #include <audio/deck.h>
 #include <audio/track.h>
 #include <ui/export/ui.h>
@@ -32,6 +33,8 @@ class mixer_screen : public screen {
 
  private:
   void on_browse_selection(const audio::track& track);
+
+  void update_deck_eq();
 
   static constexpr uint32_t DeckAMixerChannel = 0;
   static constexpr uint32_t DeckBMixerChannel = 1;
