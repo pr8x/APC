@@ -1,5 +1,5 @@
 # AustinPowers
-DIY DJ Controller using Teensy 4
+DIY Portable CDJ using Teensy 4
 
 
 ## Hardware
