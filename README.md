@@ -15,6 +15,10 @@ DIY Portable CDJ using Teensy 4
 
 ### PCB
 
+### Prototype
+
+![D86549FF-7F74-4139-A480-64EF8B23098C](https://user-images.githubusercontent.com/4670166/234878615-f74d0564-915b-46e8-9250-c6683a7f0c0e.jpeg)
+
 
 ## Audio graph
 
