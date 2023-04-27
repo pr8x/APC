@@ -43,10 +43,10 @@ class audio_graph {
   AudioAmplifier Amp_AR_Mid;         // xy=863.0909576416016,414.0909824371338
   AudioAmplifier Amp_BR_High;        // xy=863.0000114440918,787.0910773277283
   AudioAmplifier Amp_BR_Low;         // xy=864.0000190734863,701.0910844802856
-  AudioAmplifier Amp_AR_High;       // xy=865.0909576416016,455.09099769592285
+  AudioAmplifier Amp_AR_High;        // xy=865.0909576416016,455.09099769592285
   AudioAmplifier Amp_AR_Low;         // xy=866.0909576416016,372.09096813201904
   AudioMixer4 Mixer_AL_EQ;           // xy=1081.0908966064453,266.090877532959
-  AudioMixer4 Mixer_BL_EQ;           // xy=1079.9999504089355,605.0910186767578
+  AudioMixer4 Mixer_BL_EQ;           // xy=1079.9998931884766,605.0910263061523
   AudioMixer4 Mixer_AR_EQ;           // xy=1082.090835571289,399.09093856811523
   AudioMixer4 Mixer_BR_EQ;           // xy=1081.9998970031738,735.0910835266113
   AudioAmplifier Amp_AR;             // xy=1263.090955734253,392.09087562561035
@@ -119,8 +119,8 @@ class audio_graph {
   AudioConnection patchCord52{Mixer_Headphone_L, Amp_Headphone_L};
   AudioConnection patchCord53{Amp_Master_R, 0, DAC_Master, 1};
   AudioConnection patchCord54{Amp_Master_L, 0, DAC_Master, 0};
-  // AudioConnection patchCord55(Amp_Headphone_L, 0, DAC_Headphone, 0);
-  // AudioConnection patchCord56(Amp_Headphone_R, 0, DAC_Headphone, 1);
+  // AudioConnection          patchCord55(Amp_Headphone_L, 0, DAC_Headphone, 0);
+  // AudioConnection          patchCord56(Amp_Headphone_R, 0, DAC_Headphone, 1);
   // GUItool: end automatically generated code
 };
 
