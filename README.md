@@ -1,4 +1,4 @@
-# AustinPowers
+# APC - All-In-One Portable CDJ
 DIY Portable CDJ using Teensy 4
 
 
