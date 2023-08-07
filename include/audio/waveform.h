@@ -26,7 +26,7 @@ class waveform {
 
   gsl::span<const frame> frames() const;
 
-  uint64_t frame_length();
+  uint64_t frame_length() const;
 
  private:
   uint64_t _frameLengthMillis;

@@ -136,4 +136,4 @@ gsl::span<const apc::audio::waveform::frame> apc::audio::waveform::frames()
   return _frames;
 }
 
-uint64_t apc::audio::waveform::frame_length() { return _frameLengthMillis; }
+uint64_t apc::audio::waveform::frame_length() const { return _frameLengthMillis; }
