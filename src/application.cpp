@@ -5,7 +5,6 @@
 
 apc::application::application()
     : _display(DisplayConfig),
-      _controls(ControlsMux1Config),
       _diagScreen(&_usb),
       _mixerScreen(&_audioGraph, &_display, &_usb, &_browseScreen, &_controls),
       _browseScreen(&_controls, &_usb, &_trackDb) {
@@ -13,7 +12,8 @@ apc::application::application()
 }
 
 void apc::application::update() {
-  if (_controls.menu_button.is_down()) {
+
+  if (_controls.browse_knob.readAndReset() != 0) {
     if (_display.active_screen() == &_diagScreen) {
       _diagScreen.close();
     } else {
@@ -21,7 +21,7 @@ void apc::application::update() {
     }
   }
 
-  _mixerScreen.set_master_volume(_controls.master_volume_pot.value());
+  // _mixerScreen.set_master_volume(_controls.master_volume_pot.value());
 
   _usb.update();
   _display.update();

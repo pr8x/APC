@@ -38,11 +38,11 @@ void setup() {
   setup_serial();
   sync_with_RTC();
 
-// #if APC_DEBUG
-//   if (CrashReport) {
-//     Serial.print(CrashReport);
-//   }
-// #endif
+#if APC_DEBUG
+  if (CrashReport) {
+    Serial.print(CrashReport);
+  }
+#endif
 
 #if APC_ENABLE_GDB_STUB
   init_debugger();

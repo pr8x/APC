@@ -104,10 +104,10 @@ void apc::ui::screens::mixer_screen::update() {
   _deckA.update();
   _deckB.update();
 
-  if (_display->active_screen() != _browseScreen &&
-      _controls->browse_knob.delta() != 0) {
-    _display->open_screen(_browseScreen);
-  }
+  // if (_display->active_screen() != _browseScreen &&
+  //     _controls->browse_knob.delta() != 0) {
+  //   _display->open_screen(_browseScreen);
+  // }
 }
 
 const char* apc::ui::screens::mixer_screen::name() { return "mixer screen"; }
@@ -126,6 +126,6 @@ void apc::ui::screens::mixer_screen::on_browse_selection(
 }
 
 void apc::ui::screens::mixer_screen::update_deck_eq() {
-  _deckA.eq().setBass(_controls->deck_a_filter_low_pot.value(-1, 1));
-  _deckA.eq().setTreble(_controls->deck_a_filter_high_pot.value(-1, 1));
+  // _deckA.eq().setBass(_controls->deck_a_filter_low_pot.value(-1, 1));
+  // _deckA.eq().setTreble(_controls->deck_a_filter_high_pot.value(-1, 1));
 }

@@ -1,6 +1,5 @@
 #pragma once
 #include <Audio.h>
-#include <SD.h>
 #include <SPI.h>
 #include <SerialFlash.h>
 #include <Wire.h>

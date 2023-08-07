@@ -108,26 +108,26 @@ void apc::audio::deck::load_track(const track* track) {
     lv_label_set_text(_totalTimeLabel, "N/A");
   }
 
-  // APC_LOG_DEBUG("Generating waveform...");
-  // lv_obj_clear_flag(_waveformLabel, LV_OBJ_FLAG_HIDDEN);
+  APC_LOG_DEBUG("Generating waveform...");
+  lv_obj_clear_flag(_waveformLabel, LV_OBJ_FLAG_HIDDEN);
 
-  // _waveform = waveform::generate(
-  //     _track->file(),
-  //     [this](float progress) {
-  //       fixed_string_builder<24> sb;
-  //       sb.append_format("Loading...%d%%", (int)(progress * 100));
+  _waveform = waveform::generate(
+      _track->file(),
+      [this](float progress) {
+        fixed_string_builder<24> sb;
+        sb.append_format("Loading...%d%%", (int)(progress * 100));
 
-  //       lv_label_set_text(_waveformLabel, sb.str());
-  //       lv_task_handler();
-  //     },
-  //     waveform_type::rms);
+        lv_label_set_text(_waveformLabel, sb.str());
+        lv_task_handler();
+      },
+      waveform_type::rms);
 
-  // lv_obj_add_flag(_waveformLabel, LV_OBJ_FLAG_HIDDEN);
+  lv_obj_add_flag(_waveformLabel, LV_OBJ_FLAG_HIDDEN);
 
-  // APC_LOG_DEBUG(
-  //     "Waveform generated with %d frames", _waveform->frames().size());
+  APC_LOG_DEBUG(
+      "Waveform generated with %d frames", _waveform->frames().size());
 
-  // _waveformCanvas.set_waveform(&*_waveform);
+  _waveformCanvas.set_waveform(&*_waveform);
 }
 
 void apc::audio::deck::set_volume(float v) {

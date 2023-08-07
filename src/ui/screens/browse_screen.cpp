@@ -39,58 +39,58 @@ void apc::ui::screens::browse_screen::update() {
     lv_obj_add_flag(ui_BrowseScreen_USBIndicator, LV_OBJ_FLAG_HIDDEN);
   }
 
-  auto bkd = _controls->browse_knob.delta();
-  bool isRoot = _currentPath.size() == 1;
+  // auto bkd = _controls->browse_knob.delta();
+  // bool isRoot = _currentPath.size() == 1;
 
-  if (bkd != 0) {
-    if (_lbSelection != -1) {
-      auto oldItem = lv_obj_get_child(ui_BrowseScreen_FilesPanel, _lbSelection);
+  // if (bkd != 0) {
+  //   if (_lbSelection != -1) {
+  //     auto oldItem = lv_obj_get_child(ui_BrowseScreen_FilesPanel, _lbSelection);
 
-      lv_obj_remove_style(oldItem, &_lbItemStyleSelected, 0);
-    }
+  //     lv_obj_remove_style(oldItem, &_lbItemStyleSelected, 0);
+  //   }
 
-    auto index = util::clamp<uint32_t>(
-        _lbSelection + bkd,
-        0,
-        lv_obj_get_child_cnt(ui_BrowseScreen_FilesPanel) - 1);
+  //   auto index = util::clamp<uint32_t>(
+  //       _lbSelection + bkd,
+  //       0,
+  //       lv_obj_get_child_cnt(ui_BrowseScreen_FilesPanel) - 1);
 
-    select_item(index);
-  }
+  //   select_item(index);
+  // }
 
-  if (_controls->browse_knob.button.is_down()) {
-    //".."
-    if (!isRoot && _lbSelection == 0) {
-      APC_LOG_DEBUG("Navigating to parent directory");
+  // if (_controls->browse_knob.button.is_down()) {
+  //   //".."
+  //   if (!isRoot && _lbSelection == 0) {
+  //     APC_LOG_DEBUG("Navigating to parent directory");
 
-      _currentPath.pop_back();
-      load_files(_currentPath.back());
-      update_path_label();
-    } else {
-      auto& selectedFile = _files[_lbSelection - (isRoot ? 0 : 1)];
+  //     _currentPath.pop_back();
+  //     load_files(_currentPath.back());
+  //     update_path_label();
+  //   } else {
+  //     auto& selectedFile = _files[_lbSelection - (isRoot ? 0 : 1)];
 
-      if (selectedFile.isDirectory()) {
-        APC_LOG_DEBUG("Opening directory: %s", selectedFile.name());
+  //     if (selectedFile.isDirectory()) {
+  //       APC_LOG_DEBUG("Opening directory: %s", selectedFile.name());
 
-        _currentPath.push_back(selectedFile);
+  //       _currentPath.push_back(selectedFile);
 
-        load_files(selectedFile);
-        update_path_label();
-      } else {
-        APC_LOG_DEBUG("Selected file: %s", selectedFile.name());
+  //       load_files(selectedFile);
+  //       update_path_label();
+  //     } else {
+  //       APC_LOG_DEBUG("Selected file: %s", selectedFile.name());
 
-        // TODO: Before callback?
-        close();
+  //       // TODO: Before callback?
+  //       close();
 
-        if (_browseCallback != nullptr) {
-          const auto track = _trackDb->find_track(selectedFile.name());
+  //       if (_browseCallback != nullptr) {
+  //         const auto track = _trackDb->find_track(selectedFile.name());
 
-          if (track) {
-            _browseCallback(*track);
-          }
-        }
-      }
-    }
-  }
+  //         if (track) {
+  //           _browseCallback(*track);
+  //         }
+  //       }
+  //     }
+  //   }
+  //}
 }
 
 void apc::ui::screens::browse_screen::update_path_label() {
