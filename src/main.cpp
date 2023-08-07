@@ -1,6 +1,7 @@
 #include <application.h>
 #include <debug.h>
 #include <logger.h>
+
 #include <memory>
 
 namespace {
@@ -28,7 +29,9 @@ void sync_with_RTC() {
   }
 }
 
+#if APC_ENABLE_GDB_STUB
 inline void init_debugger() { debug.begin(SerialUSB1); }
+#endif
 
 }  // namespace
 

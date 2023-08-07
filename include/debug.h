@@ -2,13 +2,17 @@
 #include <Arduino.h>
 #include <logger.h>
 
+#define APC_ENABLE_GDB_STUB 0
+
+#if APC_ENABLE_GDB_STUB
 #include "TeensyDebug.h"
+#define APC_BREAKPOINT halt_cpu()
+#else
+#define APC_BREAKPOINT
+#endif
 
 #define APC_DEBUG 1
 #define APC_DEBUG_TRACE 1
-
-#define APC_ENABLE_GDB_STUB 0
-#define APC_BREAKPOINT halt_cpu()
 
 namespace apc {
 
